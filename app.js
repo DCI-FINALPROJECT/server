@@ -7,7 +7,18 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+//cors
+const cors = require ('cors')
+
 var app = express();
+
+//cors is  used in middleware
+const corsOptions = {
+  origin: "*",
+  credential: true,
+  optionSuccessStatus: 200
+}
+app.use(cors(corsOptions))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
