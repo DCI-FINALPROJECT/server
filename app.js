@@ -28,45 +28,6 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 
-// PASSPORT
-
-userSchema.plugin(findOrCreate);
-
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-
-passport.use(new GoogleStrategy({
-  clientID: GOOGLE_CLIENT_ID,
-  clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://www.example.com/auth/google/callback",
-  userProfileURL:"http://www.googleapis.com/oauth2/v3/userinfo"
-},
-function(accessToken, refreshToken, profile, cb) {
-  User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    return cb(err, user);
-  });
-}
-));
-
-
-app.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile'] }));
-
-app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  });
-
-
-
-// URI for Database
-
-const URI = process.env.MONGOOSE;
-
-app.use('/auth/google',
-  passport.authenticate('google', { scope: ['profile'] },console.log("Burasi calisti")));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

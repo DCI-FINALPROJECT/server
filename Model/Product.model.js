@@ -35,7 +35,7 @@ const productSchema = new Schema({
         type: Array
     },
     stars: { 
-        type: Number
+        type: String
     }
 
 });
