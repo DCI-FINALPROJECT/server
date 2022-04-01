@@ -11,7 +11,7 @@ const findOrCreate = require("mongoose-findorcreate");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const productsRouter = require("./routes/products")
+const productsRouter = require("./routes/product.router");
 
 //cors
 const cors = require ('cors');
@@ -59,6 +59,10 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// Mongoose
+
+const URI = process.env.MONGOOSE;
 
 mongoose.connect(URI,err=>{
   console.log("Connected to DB");
