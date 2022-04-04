@@ -1,10 +1,16 @@
-const User = require("../Model/User.model");
+const { User } = require("../Model/User.model");
+
 
 // UNCOMPLEATED POST REQ FOR USER
 
-const newUser = async (req, res) => {
+
+const addNewUser = async (req, res) => {
   try {
-    res.send("uncompleated");
+
+    const newUser = req.body
+    await User.create(newUser);
+
+    res.send("New User is created...");
   } catch (err) {
     res.json({
       status: "Error",
@@ -13,4 +19,4 @@ const newUser = async (req, res) => {
   }
 };
 
-module.exports = { newUser };
+module.exports = { addNewUser };
