@@ -59,4 +59,22 @@ const addProduct = async (req, res) => {
   
 };
 
-module.exports = {addProduct, getProductById} 
+// GET ALL PRODUCTS !!!! WE WILL DELETE THIS API, LATER
+
+const getAllProducts = async (req, res) => {
+  try {
+    
+
+    const findedProducts = await Product.find();
+
+    res.json(findedProducts);
+  } catch (err) {
+    res.status(404).json({
+      status: "404",
+      message: err,
+    });
+  }
+};
+
+module.exports = { addProduct, getProductById,getAllProducts };
+

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const {addProduct, getProductById, getAllProducts} = require("../controller/product.controller")
 const { body } = require("express-validator");
-const {addProduct, getProductById} = require("../controller/product.controller")
 
 // POST add new product
 router.post("/addproduct",
@@ -18,9 +18,16 @@ router.post("/addproduct",
 
 addProduct);
 
+// GET listing all products !!!! WE WILL CHANGE THIS API, LATER
+
+router.get("/products/all", getAllProducts);
+
+
+
 // GET listing products with products' id
 
 router.get("/product/:id", getProductById);
+
 
 
 module.exports= router;
