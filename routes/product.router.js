@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const {addProduct, getProductById, getAllProducts} = require("../controller/product.controller")
+const {addProduct, getProductById, getAllProducts, getFiveNewestProduct} = require("../controller/product.controller")
 const { body } = require("express-validator");
+
 
 // POST add new product
 router.post("/addproduct",
@@ -18,6 +19,10 @@ router.post("/addproduct",
 
 addProduct);
 
+// GET listing newest 5 products
+router.get("/product/newestfive", getFiveNewestProduct);
+
+
 // GET listing all products !!!! WE WILL CHANGE THIS API, LATER
 
 router.get("/products/all", getAllProducts);
@@ -26,7 +31,10 @@ router.get("/products/all", getAllProducts);
 
 // GET listing products with products' id
 
+
+// GET listing products with products' id
 router.get("/product/:id", getProductById);
+
 
 
 

@@ -36,6 +36,9 @@ const productSchema = new Schema({
     },
     stars: { 
         type: String
+    },
+    timestamp: {
+        type: String
     }
 
 });
