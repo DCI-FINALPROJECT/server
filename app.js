@@ -22,12 +22,13 @@ const cors = require ('cors');
 var app = express();
 
 //cors is  used in middleware
-const corsOptions = {
-  origin: "*",
-  credential: true,
-  optionSuccessStatus: 200
-}
-app.use(cors(corsOptions))
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
 
 
 
