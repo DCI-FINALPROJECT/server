@@ -13,8 +13,8 @@ router.get("/", function (req, res, next) {
 router.post(
   "/newUser",
 
-  body("name").exists().withMessage("Person can not be empty!"),
-  body("surname").exists().withMessage("Person can not be empty!"),
+  body("firstName").exists().withMessage("Person can not be empty!"),
+  body("lastName").exists().withMessage("Person can not be empty!"),
   body("email")
     .exists()
     .isEmail()
