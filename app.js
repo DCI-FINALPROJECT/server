@@ -5,27 +5,71 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
 require('dotenv').config();
-const passport = require("passport");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const findOrCreate = require("mongoose-findorcreate");
+const passport = require("passport");
+const cookieSession = require("cookie-session");
+const authRoute = require("./routes/auth");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const productsRouter = require("./routes/product.router");
 
-//cors
-const cors = require ('cors');
-const { User,userSchema } = require('./Model/User.model');
 
 var app = express();
 
-//cors is  used in middleware
-const corsOptions = {
-  origin: "*",
-  credential: true,
-  optionSuccessStatus: 200
+// PASSPORTJS
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+
+passport.use(new GoogleStrategy({
+  clientID: GOOGLE_CLIENT_ID,
+  clientSecret: GOOGLE_CLIENT_SECRET,
+  callbackURL: "/auth/google/callback"
+},
+function(accessToken, refreshToken, profile, done) {
+
+
+  console.log(profile);
+ 
+  done(null,profile)
 }
-app.use(cors(corsOptions))
+));
+
+
+
+passport.serializeUser((user,done)=>{
+  done(null,user)
+})
+
+passport.deserializeUser((user,done)=>{
+  done(null,user)
+})
+
+
+app.use(
+cookieSession({ name: "session", keys: ["lama"], maxAge: 24 * 60 * 60 * 100 })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+app.use("/auth",authRoute);
+
+
+//cors
+const cors = require ('cors');
+//cors is  used in middleware
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
+
+
 
 
 
@@ -39,9 +83,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
 app.use('/', indexRouter);
 app.use('/', usersRouter);
 app.use("/", productsRouter);
+
+
 
 
 // catch 404 and forward to error handler
