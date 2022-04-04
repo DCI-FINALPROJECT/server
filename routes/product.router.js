@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
-const {addProduct} = require("../controller/product.controller")
+const {addProduct, getProductById} = require("../controller/product.controller")
 
-
-
+// POST add new product
 router.post("/addproduct",
 
 //Validation
@@ -17,7 +16,11 @@ router.post("/addproduct",
   body("quantities").exists().withMessage("quantities can not be empty"),
   body("stars").isFloat({ min: 1.0, max: 5.0 }).withMessage("stars should be between 1 und 5"),
 
-
 addProduct);
+
+// GET listing products with products' id
+
+router.get("/product/:id", getProductById);
+
 
 module.exports= router;

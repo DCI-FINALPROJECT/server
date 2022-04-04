@@ -4,14 +4,18 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
-require('dotenv').config()
+require('dotenv').config();
+const passport = require("passport");
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const findOrCreate = require("mongoose-findorcreate");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const productRouter = require ('./routes/product.router')
+const productsRouter = require("./routes/product.router");
 
 //cors
-const cors = require ('cors')
+const cors = require ('cors');
+const { User,userSchema } = require('./Model/User.model');
 
 var app = express();
 
@@ -23,9 +27,6 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 
-// URI for Database
-
-const URI = process.env.MONGOOSE;
 
 
 // view engine setup
@@ -40,7 +41,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/', usersRouter);
-app.use('/', productRouter);
+app.use("/", productsRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -57,6 +59,10 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// Mongoose
+
+const URI = process.env.MONGOOSE;
 
 mongoose.connect(URI,err=>{
   console.log("Connected to DB");
