@@ -19,6 +19,7 @@ const userSchema = new Schema({
   password: {
     required: true,
     type: String,
+    // select:false  ATTENTION: This statement should be added!
   },
   address: {
     type: String,
@@ -30,4 +31,4 @@ const userSchema = new Schema({
 
 const User = model("user", userSchema, "user");
 
-module.exports = {User,userSchema};
+module.exports = {User};
