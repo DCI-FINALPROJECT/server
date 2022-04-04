@@ -5,22 +5,61 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
 require('dotenv').config();
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const passport = require("passport");
-const passportSetup = require("./helpers/passport");
 const cookieSession = require("cookie-session");
+const authRoute = require("./routes/auth");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const productsRouter = require("./routes/product.router");
-const authRoute = require("./Middleware/auth.middleware");
 
+
+var app = express();
+
+// PASSPORTJS
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+
+passport.use(new GoogleStrategy({
+  clientID: GOOGLE_CLIENT_ID,
+  clientSecret: GOOGLE_CLIENT_SECRET,
+  callbackURL: "/auth/google/callback"
+},
+function(accessToken, refreshToken, profile, done) {
+
+
+  console.log(profile);
+ 
+  done(null,profile)
+}
+));
+
+
+
+passport.serializeUser((user,done)=>{
+  done(null,user)
+})
+
+passport.deserializeUser((user,done)=>{
+  done(null,user)
+})
+
+
+app.use(
+cookieSession({ name: "session", keys: ["lama"], maxAge: 24 * 60 * 60 * 100 })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+app.use("/auth",authRoute);
 
 
 //cors
 const cors = require ('cors');
-
-var app = express();
-
 //cors is  used in middleware
 app.use(
   cors({
@@ -46,12 +85,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-
 app.use('/', indexRouter);
 app.use('/', usersRouter);
 app.use("/", productsRouter);
 
-app.use("/auth", authRoute);
 
 
 
