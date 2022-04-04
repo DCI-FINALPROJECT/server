@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
-const {addProduct, getProductById} = require("../controller/product.controller")
+const {addProduct, getProductById, getFiveNewestProduct} = require("../controller/product.controller")
 
 // POST add new product
 router.post("/addproduct",
@@ -18,9 +18,14 @@ router.post("/addproduct",
 
 addProduct);
 
-// GET listing products with products' id
+// GET listing newest 5 products
+router.get("/product/newestfive", getFiveNewestProduct);
 
+
+// GET listing products with products' id
 router.get("/product/:id", getProductById);
+
+
 
 
 module.exports= router;

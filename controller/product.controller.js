@@ -18,6 +18,20 @@ const getProductById = async (req, res) => {
   }
 };
 
+const getFiveNewestProduct = async (req, res) =>{
+  try{
+    const newestFive = await Product.find().sort({'timestamp':-1}).limit(5)
+
+    res.json(newestFive);
+  }catch (err) {
+    res.status(404).json({
+      status: "404",
+      message: err,
+    });
+  }
+
+}
+
 const addProduct = async (req, res) => {
   const data = req.body;
     
@@ -41,7 +55,8 @@ const addProduct = async (req, res) => {
                 images: data.images,
                 quantities: data.quantities,
                 reviews:data.reviews,
-                stars: data.stars
+                stars: data.stars,
+                timestamp: new Date().toISOString()
             })
         
             await product.save();
@@ -59,4 +74,4 @@ const addProduct = async (req, res) => {
   
 };
 
-module.exports = {addProduct, getProductById} 
+module.exports = {addProduct, getProductById, getFiveNewestProduct} 
