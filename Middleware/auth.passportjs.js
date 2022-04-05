@@ -1,21 +1,31 @@
 const router = require("express").Router();
 const passport = require("passport");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 
 const CLIENT_URL = "http://localhost:3000/";
 
+const jwt_secret_key = process.env.JWT_SECRET_KEY;
 
-router.get("/login/success",(req,res)=>{
+console.log(jwt_secret_key);
 
-    console.log("LOGIN SUCCESS'TEN:",req.user);
+
+router.get("/login/success",async (req,res)=>{
+
 
     if(req.user){
+
+        
+        const emailFromPassportLogin = req.user._json.email; // This request come from client/app.js/getUser funct.
+        console.log("REQ USER:",emailFromPassportLogin);
 
         res.status(200).json({
             success:true,
             message:"successfull",
             user:req.user,
-            cookies:req.cookies
+            cookies:req.cookies,
+            token:jwt.sign({email:emailFromPassportLogin},jwt_secret_key)            
         })
 
     }else{
