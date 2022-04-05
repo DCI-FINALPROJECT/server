@@ -8,7 +8,7 @@ require('dotenv').config();
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const passport = require("passport");
 const cookieSession = require("cookie-session");
-const authRoute = require("./routes/auth");
+const authRoute = require("./Middleware/auth.passportjs");
 const cors = require ('cors');
 
 var indexRouter = require('./routes/index');
