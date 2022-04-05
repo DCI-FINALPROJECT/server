@@ -9,6 +9,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const passport = require("passport");
 const cookieSession = require("cookie-session");
 const authRoute = require("./routes/auth");
+const cors = require ('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -16,6 +17,20 @@ const productsRouter = require("./routes/product.router");
 
 
 var app = express();
+
+
+//cors
+
+app.use(
+  cors({
+    origin: true,
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+    allowedHeaders:["Content-Type","Authorization"]
+  })
+);
+
+
 
 // PASSPORTJS
 
@@ -58,16 +73,6 @@ app.use(passport.session());
 app.use("/auth",authRoute);
 
 
-//cors
-const cors = require ('cors');
-//cors is  used in middleware
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true,
-  })
-);
 
 
 
