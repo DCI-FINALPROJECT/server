@@ -18,6 +18,8 @@ router.get("/login/success",(req,res)=>{
             cookies:req.cookies
         })
 
+    }else{
+        res.send("Unauthorized")
     }
 
 })
