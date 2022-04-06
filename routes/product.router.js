@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {addProduct, getProductById, getAllProducts, getFiveNewestProduct, getProductByName} = require("../controller/product.controller")
+const {addProduct, getProductById, getAllProducts, getFiveNewestProduct} = require("../controller/product.controller")
 const { body } = require("express-validator");
 
 
@@ -28,10 +28,6 @@ router.get("/product/newestfive", getFiveNewestProduct);
 router.get("/products/all", getAllProducts);
 
 
-
-// GET listing products with productName
-
-router.get("/product/search/:productName", getProductByName);
 
 // GET listing products with products' id
 router.get("/product/:id", getProductById);

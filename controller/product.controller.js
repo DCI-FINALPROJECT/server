@@ -92,23 +92,9 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-// GET SEARCHED PRODUCTS 
 
-const getProductByName = async (req, res) => {
-  try {
-    const productName = req.params.productName;
 
-    const findedProducts = await Product.find( { $text: { $search: productName } } );
 
-    res.json(findedProducts);
-  } catch (err) {
-    res.status(404).json({
-      status: "404",
-      message: err,
-    });
-  }
-};
-
-module.exports = { addProduct, getProductById, getAllProducts, getFiveNewestProduct, getProductByName };
+module.exports = { addProduct, getProductById, getAllProducts, getFiveNewestProduct };
 
 
