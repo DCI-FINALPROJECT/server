@@ -15,7 +15,6 @@ router.get("/login/success",async (req,res)=>{
 
     if(req.user){
 
-        console.log("REQQQQ:", req.user);
         const emailFromPassportLogin = req.user._json.email; // This request come from client/app.js/getUser funct.
 
         const findingUser = await User.findOne({email:emailFromPassportLogin});        
