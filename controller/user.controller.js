@@ -1,6 +1,11 @@
 const { User } = require("../Model/User.model");
 const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
+
+const jwt_secret_key = process.env.JWT_SECRET_KEY;
 
 const addNewUser = async (req, res) => {
   const errors = validationResult(req);
@@ -35,15 +40,52 @@ const addNewUser = async (req, res) => {
   }
 };
 
-
 // This controller is created to go user page with permission.
 
-const userPageAuth = (req,res)=>{
-
+const userPageAuth = (req, res) => {
   res.status(200).json({
-    status:"success"
-  })
+    status: "success",
+  });
+};
 
-}
+// user login controller
 
-module.exports = { addNewUser,userPageAuth };
+const userLoginController = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const findingUser = await User.findOne({email:email});
+
+    console.log("FINDING:",findingUser);
+
+    const {firstName,lastName}= findingUser;
+
+    const userInformation = {firstName,lastName,email};
+
+    const isTrue = await bcrypt.compare(password,findingUser.password);
+
+    if(findingUser && isTrue){
+
+      const userToken = jwt.sign({email:email},jwt_secret_key);
+
+      console.log(userToken);
+
+      return res.json({userToken,userInformation});
+      
+
+    }
+
+    res.json({
+      status:"error",
+      message:"Password or E-mail are false!"      
+    })
+    
+
+
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports = { addNewUser, userPageAuth, userLoginController };

@@ -1,5 +1,5 @@
 var express = require("express");
-const { addNewUser, userPageAuth } = require("../controller/user.controller");
+const { addNewUser, userPageAuth, userLoginController } = require("../controller/user.controller");
 var router = express.Router();
 const { body } = require("express-validator");
 const auth = require("../Middleware/auth.jwt.middleware");
@@ -35,6 +35,8 @@ router.post(
 
 // This route is created to go user page with permission.
 
-router.get("/userpage", auth, userPageAuth)
+router.get("/userpage", auth, userPageAuth);
+
+router.post("/userlogin", userLoginController);
 
 module.exports = router;
