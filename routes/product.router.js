@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {addProduct, getProductById, getAllProducts, getFiveNewestProduct} = require("../controller/product.controller")
 const { body } = require("express-validator");
+const auth = require("../Middleware/auth.jwt.middleware");
 
 
 // POST add new product

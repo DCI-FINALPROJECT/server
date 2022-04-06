@@ -25,7 +25,7 @@ router.get("/login/success",async (req,res)=>{
             message:"successfull",
             user:req.user,
             cookies:req.cookies,
-            token:jwt.sign({email:emailFromPassportLogin},jwt_secret_key)            
+            token:jwt.sign({email:emailFromPassportLogin},jwt_secret_key)   // JWT was produced, here.         
         })
 
     }else{
