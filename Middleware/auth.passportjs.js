@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+const { User } = require("../Model/User.model");
 require("dotenv").config();
 
 
@@ -14,14 +15,18 @@ router.get("/login/success",async (req,res)=>{
 
     if(req.user){
 
-        
+        console.log("REQQQQ:", req.user);
         const emailFromPassportLogin = req.user._json.email; // This request come from client/app.js/getUser funct.
+
+        const findingUser = await User.findOne({email:emailFromPassportLogin});        
+
+        
         console.log("REQ USER:",emailFromPassportLogin);
 
         res.status(200).json({
             success:true,
             message:"successfull",
-            user:req.user,
+            user:findingUser,
             cookies:req.cookies,
             token:jwt.sign({email:emailFromPassportLogin},jwt_secret_key)   // JWT was produced, here.         
         })
