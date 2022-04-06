@@ -4,7 +4,6 @@ const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-
 const jwt_secret_key = process.env.JWT_SECRET_KEY;
 
 const addNewUser = async (req, res) => {
@@ -54,38 +53,71 @@ const userLoginController = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const findingUser = await User.findOne({email:email});
+    const findingUser = await User.findOne({ email: email });
 
-    console.log("FINDING:",findingUser);
+    const { firstName, lastName } = findingUser;
 
-    const {firstName,lastName}= findingUser;
+    const userInformation = { firstName, lastName, email };
 
-    const userInformation = {firstName,lastName,email};
+    const isTrue = await bcrypt.compare(password, findingUser.password);
 
-    const isTrue = await bcrypt.compare(password,findingUser.password);
-
-    if(findingUser && isTrue){
-
-      const userToken = jwt.sign({email:email},jwt_secret_key);
+    if (findingUser && isTrue) {
+      const userToken = jwt.sign({ email: email }, jwt_secret_key);
 
       console.log(userToken);
 
-      return res.json({userToken,userInformation});
-      
-
+      return res.json({ userToken, userInformation,message:"Successfully login" });
     }
 
     res.json({
-      status:"error",
-      message:"Password or E-mail are false!"      
-    })
-    
-
-
-
+      status: "error",
+      message: "Password or E-mail are false!",
+    });
   } catch (err) {
     console.log(err);
+    res.json({
+      status: "error",
+      message: "Password or E-mail are false!",
+    });
   }
 };
 
-module.exports = { addNewUser, userPageAuth, userLoginController };
+const findUserController = async (req, res) => {
+
+  try{
+
+    const authFromLogin = await req.header("Authorization");
+  
+    const gettingToken = authFromLogin.split(" ")[1];
+  
+    const result = jwt.verify(gettingToken,jwt_secret_key);
+  
+    console.log(result);
+  
+    const emailFromToken = result.email;
+  
+    const findingUser = await User.findOne({email:emailFromToken});
+
+    if(findingUser){
+      return res.json({user:findingUser,message:"Successfully authorized"});
+
+    }else{
+      return res.json({message:"Email or password is false!"})
+    }
+
+
+  }catch(err){
+    console.log(err);
+  }
+
+
+
+  
+};
+
+module.exports = {
+  addNewUser,
+  userPageAuth,
+  userLoginController,
+  findUserController,
+};
