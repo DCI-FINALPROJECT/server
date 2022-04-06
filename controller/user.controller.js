@@ -35,4 +35,15 @@ const addNewUser = async (req, res) => {
   }
 };
 
-module.exports = { addNewUser };
+
+// This controller is created to go user page with permission.
+
+const userPageAuth = (req,res)=>{
+
+  res.status(200).json({
+    status:"success"
+  })
+
+}
+
+module.exports = { addNewUser,userPageAuth };

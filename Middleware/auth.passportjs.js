@@ -8,11 +8,9 @@ const CLIENT_URL = "http://localhost:3000/";
 
 const jwt_secret_key = process.env.JWT_SECRET_KEY;
 
-console.log(jwt_secret_key);
 
 
 router.get("/login/success",async (req,res)=>{
-
 
     if(req.user){
 
