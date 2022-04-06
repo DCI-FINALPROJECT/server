@@ -31,9 +31,6 @@ router.get("/products/all", getAllProducts);
 
 
 // GET listing products with products' id
-
-
-// GET listing products with products' id
 router.get("/product/:id", getProductById);
 
 

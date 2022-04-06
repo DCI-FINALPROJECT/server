@@ -92,6 +92,9 @@ const getAllProducts = async (req, res) => {
   }
 };
 
+
+
+
 module.exports = { addProduct, getProductById, getAllProducts, getFiveNewestProduct };
 
 
