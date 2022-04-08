@@ -94,7 +94,35 @@ const getAllProducts = async (req, res) => {
 
 
 
+// GET SIMILAR PRODUCTS
 
-module.exports = { addProduct, getProductById, getAllProducts, getFiveNewestProduct };
+const getSimilarProducts = async(req,res) =>{
+
+  try{
+
+    const params = req.params;
+    const category = params.category;
+    const id = params.id;
+
+    console.log("Kategori:",category);
+
+    const similarProducts = await Product.find({category:category,_id:{$nin:id}});
+
+    console.log(similarProducts);
+
+    res.json(similarProducts);
+
+  }catch(err){
+    res.json({
+      status:404,
+      message:"Error"
+    })
+  }
+}
+
+
+
+
+module.exports = { addProduct, getProductById, getAllProducts, getFiveNewestProduct,getSimilarProducts };
 
 
