@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const {addProduct, getProductById, getAllProducts, getFiveNewestProduct, getSimilarProducts} = require("../controller/product.controller")
+const {addProduct, getProductById, getAllProducts, getFiveNewestProduct, getSimilarProducts, getBrandsFromDataBase} = require("../controller/product.controller")
 const { body } = require("express-validator");
 const auth = require("../Middleware/auth.jwt.middleware");
+const Product = require("../Model/Product.model");
 
 
 // POST add new product
@@ -36,6 +37,13 @@ router.get("/product/:id", getProductById);
 // GET Similar Products
 
 router.get("/product/similar/:category/:id",getSimilarProducts);
+
+
+// GET Brands (We use this for filter Brands)
+
+router.get("/product/brands/filter",getBrandsFromDataBase);
+
+
 
 
 module.exports= router;
