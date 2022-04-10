@@ -62,6 +62,7 @@ const addProduct = async (req, res) => {
         reviews: data.reviews,
         stars: data.stars,
         timestamp: new Date().toISOString(),
+        sales:data.sales
       });
 
       await product.save();
@@ -77,11 +78,26 @@ const addProduct = async (req, res) => {
   }
 };
 
-// GET ALL PRODUCTS !!!! WE WILL DELETE THIS API, LATER
+// GET LATEST PRODUCTS !
 
-const getAllProducts = async (req, res) => {
+const getLatestProducts = async (req, res) => {
   try {
-    const findedProducts = await Product.find();
+    const findedProducts = await Product.find().sort({_id:-1});
+
+    res.json(findedProducts);
+  } catch (err) {
+    res.status(404).json({
+      status: "404",
+      message: err,
+    });
+  }
+};
+
+// GET BEST SELLER PRODUCTS !
+
+const getBestSellers = async (req, res) => {
+  try {
+    const findedProducts = await Product.find().sort({sales:-1});
 
     res.json(findedProducts);
   } catch (err) {
@@ -158,8 +174,9 @@ const getBrandsFromDataBase = async (req, res) => {
 module.exports = {
   addProduct,
   getProductById,
-  getAllProducts,
+  getLatestProducts,
   getFiveNewestProduct,
   getSimilarProducts,
   getBrandsFromDataBase,
+  getBestSellers
 };
