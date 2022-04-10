@@ -1,6 +1,6 @@
 const Product = require("../Model/Product.model");
 
-// GET NUMBER OF PRODUCTS BY CATEGORY
+//-----> GET NUMBER OF PRODUCTS BY CATEGORY
 
 const getNumberOfCategory = async (req, res) => {
 
@@ -12,7 +12,6 @@ const getNumberOfCategory = async (req, res) => {
   
       const result = await Product.find({ category: req.params.category })
 
-      console.log(result);
     
       res.json(result.length);
     } catch (err) {
@@ -23,17 +22,33 @@ const getNumberOfCategory = async (req, res) => {
     }
   };
 
-// GET PRODUCTS BY CATEGORY WITH PAGE
+//------> GET PRODUCTS BY CATEGORY WITH PAGE
 
 const getCategoryWithPage = async (req, res) => {
   // "/category/:category/:whichPage"  related api for this controller
 
   try {
     const page = req.params.whichPage;
+    const choise = req.query.choise;
+
+    let criterion = {};
+
+    if(choise === "1"){
+      criterion = {_id:-1}  // This is for new products
+    }else if(choise === "2"){
+      
+      criterion = {sales:-1}  // This is for sales
+    }else if(choise === "3"){
+      
+      criterion = {price:1}  // This is for price
+    }
+
+    console.log(choise);
 
     const result = await Product.find({ category: req.params.category })
-      .limit(2)
-      .skip((page - 1) * 2);
+      .sort(criterion)
+      .limit(4)
+      .skip((page - 1) * 4);
 
     res.json(result);
   } catch (err) {

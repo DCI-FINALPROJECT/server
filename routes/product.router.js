@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {addProduct, getProductById, getAllProducts, getFiveNewestProduct, getSimilarProducts, getBrandsFromDataBase} = require("../controller/product.controller")
+const {addProduct, getProductById, getFiveNewestProduct, getSimilarProducts, getBrandsFromDataBase, getLatestProducts, getBestSellers} = require("../controller/product.controller")
 const { body } = require("express-validator");
 const auth = require("../Middleware/auth.jwt.middleware");
 const Product = require("../Model/Product.model");
@@ -27,7 +27,10 @@ router.get("/product/newestfive", getFiveNewestProduct);
 
 // GET listing all products !!!! WE WILL CHANGE THIS API, LATER
 
-router.get("/products/all", getAllProducts);
+router.get("/products/all", getLatestProducts);
+
+
+router.get("/products/bestSellers", getBestSellers);
 
 
 

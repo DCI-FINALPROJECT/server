@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const {Schema, model} = mongoose;
+const SchemaTypes = mongoose.Schema.Types;
 
 const productSchema = new Schema({
 
@@ -16,7 +17,7 @@ const productSchema = new Schema({
         required: true
     },
     price: { 
-        type: String,
+        type: SchemaTypes.Number,
         required: true
     },
     description: { 
@@ -39,6 +40,9 @@ const productSchema = new Schema({
     },
     timestamp: {
         type: String
+    },
+    sales:{
+        type:Number
     }
 
 });
