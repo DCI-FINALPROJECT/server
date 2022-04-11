@@ -3,24 +3,45 @@ const Product = require("../Model/Product.model");
 //-----> GET NUMBER OF PRODUCTS BY CATEGORY
 
 const getNumberOfCategory = async (req, res) => {
+  // "/category/numberOfProductByCategory/:category"  related api for this controller
+ 
 
-    // "/category/numberOfProductByCategory/:category"  related api for this controller
+  const category = req.params.category;
+  const brands =
+  req.query.brands === null || req.query.brands === ""
+    ? ""
+    : req.query.brands;
 
-  
-    try {
 
-  
-      const result = await Product.find({ category: req.params.category })
+  const min = req.query.min === null ? 0 : req.query.min;
+  const max = req.query.max === null ? 0 :req.query.max;
 
-    
-      res.json(result.length);
-    } catch (err) {
-      res.status(404).json({
-        status: "404",
-        message: err,
-      });
+  let filteringCriteria =  {category:category,brands:brands,min:min,max:max}; // EQUAL WITH =  {category:category,brands:brands,min:min,max:max}
+
+  if(brands !== ""){
+
+    const array = brands.split(",");
+
+
+    if(array.length>0){
+      filteringCriteria["brand"]={
+        $in:array,
+      }
     }
-  };
+  }
+
+
+  try {
+    const result = await Product.find(filteringCriteria);
+
+    res.json(result.length);
+  } catch (err) {
+    res.status(404).json({
+      status: "404",
+      message: err,
+    });
+  }
+};
 
 //------> GET PRODUCTS BY CATEGORY WITH PAGE
 
@@ -30,25 +51,41 @@ const getCategoryWithPage = async (req, res) => {
   try {
     const page = req.params.whichPage;
     const choise = req.query.choise;
+    const brands = req.query.brands;
+
+   
+
+    let brandsArray = [];
+    let filteringCriteria; 
+
+    
+    if(brands !== ""){
+        brandsArray = brands.split(",");
+
+        filteringCriteria = {category:req.params.category,brand:{
+          $in:brandsArray,
+        }}
+
+    }else{
+      filteringCriteria = {category:req.params.category}
+    }
+
 
     let criterion = {};
 
-    if(choise === "1"){
-      criterion = {_id:-1}  // This is for new products
-    }else if(choise === "2"){
-      
-      criterion = {sales:-1}  // This is for sales
-    }else if(choise === "3"){
-      
-      criterion = {price:1}  // This is for price
+    if (choise === "1") {
+      criterion = { _id: -1 }; // This is for new products
+    } else if (choise === "2") {
+      criterion = { sales: -1 }; // This is for sales
+    } else if (choise === "3") {
+      criterion = { price: 1 }; // This is for price
     }
 
-    console.log(choise);
-
-    const result = await Product.find({ category: req.params.category })
+    const result = await Product.find(filteringCriteria)
       .sort(criterion)
       .limit(4)
       .skip((page - 1) * 4);
+
 
     res.json(result);
   } catch (err) {
@@ -59,8 +96,4 @@ const getCategoryWithPage = async (req, res) => {
   }
 };
 
-
-
-
-
-module.exports = { getCategoryWithPage,getNumberOfCategory };
+module.exports = { getCategoryWithPage, getNumberOfCategory };
