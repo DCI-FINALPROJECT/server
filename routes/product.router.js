@@ -17,7 +17,7 @@ router.post("/addproduct",
   body("description").exists().withMessage("description can not be empty"),
   body("images").exists().withMessage("images can not be empty"),
   body("quantities").exists().withMessage("quantities can not be empty"),
-  body("stars").isFloat({ min: 1.0, max: 5.0 }).withMessage("stars should be between 1 und 5"),
+  //body("stars").isFloat({ min: 1.0, max: 5.0 }).withMessage("stars should be between 1 und 5"),
 
 addProduct);
 
