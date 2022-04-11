@@ -1,3 +1,4 @@
+const Category = require("../Model/Category.model");
 const Product = require("../Model/Product.model");
 
 //-----> GET NUMBER OF PRODUCTS BY CATEGORY
@@ -128,4 +129,21 @@ const getCategoryWithPage = async (req, res) => {
   }
 };
 
-module.exports = { getCategoryWithPage, getNumberOfCategory };
+// --------->  CREATE CATEGORY
+
+const createCategory = async (req, res) => {
+  try {
+    const category = {
+      categoryName: req.body.categoryName,
+      categoryUrl: req.body.categoryUrl,
+      categoryDescription: req.body.categoryDescription,
+    };
+
+    const createdCategory = await Category.create(category);
+    res.json(createdCategory)
+  } catch (err) {
+    res.status(404).json({ status: 404, message: err });
+  }
+};
+
+module.exports = { getCategoryWithPage, getNumberOfCategory, createCategory };

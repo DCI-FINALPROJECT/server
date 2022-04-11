@@ -120,7 +120,7 @@ const getSimilarProducts = async (req, res) => {
     const similarProducts = await Product.find({
       category: category,
       _id: { $nin: id },
-    });
+    }).limit(6);
 
     console.log(similarProducts);
 
