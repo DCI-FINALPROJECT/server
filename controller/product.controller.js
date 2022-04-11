@@ -116,7 +116,6 @@ const getSimilarProducts = async (req, res) => {
     const category = params.category;
     const id = params.id;
 
-    console.log("Kategori:", category);
 
     const similarProducts = await Product.find({
       category: category,

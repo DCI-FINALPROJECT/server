@@ -4,32 +4,47 @@ const Product = require("../Model/Product.model");
 
 const getNumberOfCategory = async (req, res) => {
   // "/category/numberOfProductByCategory/:category"  related api for this controller
- 
 
   const category = req.params.category;
   const brands =
-  req.query.brands === null || req.query.brands === ""
-    ? ""
-    : req.query.brands;
+    req.query.brands === null || req.query.brands === ""
+      ? ""
+      : req.query.brands;
 
+  let minPrice = parseInt(req.query.min) === null ? 0 : parseInt(req.query.min);
+  let maxPrice = parseInt(req.query.max) === null ? 0 : parseInt(req.query.max);
 
-  const min = req.query.min === null ? 0 : req.query.min;
-  const max = req.query.max === null ? 0 :req.query.max;
+  let filteringCriteria = {
+    category: category,
+    brands: brands,
+    min: minPrice,
+    max: maxPrice,
+  }; // EQUAL WITH =  {category:category,brands:brands,min:min,max:max}
 
-  let filteringCriteria =  {category:category,brands:brands,min:min,max:max}; // EQUAL WITH =  {category:category,brands:brands,min:min,max:max}
-
-  if(brands !== ""){
-
+  if (brands !== "") {
     const array = brands.split(",");
 
-
-    if(array.length>0){
-      filteringCriteria["brand"]={
-        $in:array,
-      }
+    if (array.length > 0) {
+      filteringCriteria["brand"] = {
+        $in: array,
+      };
     }
   }
 
+  if (minPrice > 0 && maxPrice === 0) {
+    maxPrice = 9999999999;
+  }
+
+  if (
+    (minPrice === 0 && maxPrice > 0) ||
+    (minPrice > 0 && maxPrice === 0) ||
+    (minPrice > 0 && maxPrice > 0)
+  ) {
+    filteringCriteria["price"] = {
+      $gt: minPrice,
+      $lt: maxPrice,
+    };
+  }
 
   try {
     const result = await Product.find(filteringCriteria);
@@ -53,23 +68,41 @@ const getCategoryWithPage = async (req, res) => {
     const choise = req.query.choise;
     const brands = req.query.brands;
 
-   
+    let minPrice = parseInt(req.query.min);
+    let maxPrice = parseInt(req.query.max);
+
+    console.log(minPrice, maxPrice);
 
     let brandsArray = [];
-    let filteringCriteria; 
+    let filteringCriteria;
 
-    
-    if(brands !== ""){
-        brandsArray = brands.split(",");
+    if (brands !== "") {
+      brandsArray = brands.split(",");
 
-        filteringCriteria = {category:req.params.category,brand:{
-          $in:brandsArray,
-        }}
-
-    }else{
-      filteringCriteria = {category:req.params.category}
+      filteringCriteria = {
+        category: req.params.category,
+        brand: {
+          $in: brandsArray,
+        },
+      };
+    } else {
+      filteringCriteria = { category: req.params.category };
     }
 
+    if (minPrice > 0 && maxPrice === 0) {
+      maxPrice = 9999999999;
+    }
+
+    if (
+      (minPrice === 0 && maxPrice > 0) ||
+      (minPrice > 0 && maxPrice === 0) ||
+      (minPrice > 0 && maxPrice > 0)
+    ) {
+      filteringCriteria["price"] = {
+        $gt: minPrice,
+        $lt: maxPrice,
+      };
+    }
 
     let criterion = {};
 
@@ -85,7 +118,6 @@ const getCategoryWithPage = async (req, res) => {
       .sort(criterion)
       .limit(4)
       .skip((page - 1) * 4);
-
 
     res.json(result);
   } catch (err) {
