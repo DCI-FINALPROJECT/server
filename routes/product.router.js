@@ -56,6 +56,10 @@ router.get("/product/similar/:category/:id", getSimilarProducts);
 
 // GET Brands (We use this for filter Brands)
 
-router.get("/product/brands/filter", getBrandsFromDataBase);
+
+router.get("/product/brands/filter/:category",getBrandsFromDataBase);
+
+
+
 
 module.exports = router;

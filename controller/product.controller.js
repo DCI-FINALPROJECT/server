@@ -118,12 +118,11 @@ const getSimilarProducts = async (req, res) => {
     const category = params.category;
     const id = params.id;
 
-    console.log("Kategori:", category);
 
     const similarProducts = await Product.find({
       category: category,
       _id: { $nin: id },
-    });
+    }).limit(6);
 
     console.log(similarProducts);
 
@@ -140,9 +139,9 @@ const getSimilarProducts = async (req, res) => {
 
 const getBrandsFromDataBase = async (req, res) => {
   try {
-    
 
-   const result = (await Product.find()).reduce((acc,cur) => {
+
+   const result = (await Product.find({category:req.params.category})).reduce((acc,cur) => {
       if (!acc[cur.brand]){
         acc[cur.brand] =1
       }else{
@@ -150,7 +149,9 @@ const getBrandsFromDataBase = async (req, res) => {
       }
 
       return acc;
-    },{});    
+    },{});  
+    
+    console.log(result);
 
     const arr = [Object.keys(result),Object.values(result)];
 
