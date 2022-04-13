@@ -6,18 +6,17 @@ const reviewSchema = new Schema({
   productId: {
     type: String,
     required: true,
-    unique:true
   },
   name: {
     type: String,
     required: true,
-    unique:true
   },
   content: {
     type: String,
   },
   date:{
-     type:String 
+     type:Date,
+     default : Date.now
   },
   userId:{
       type:String
