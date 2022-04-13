@@ -2,7 +2,7 @@ const Review = require("../Model/Review.model");
 
 const getReviewById = async (req, res) => {
   try {
-    const findingReview = await Review.find({ productId: req.params.id });
+    const findingReview = await Review.find({ productId: req.params.id }).sort({date:-1});
     res.json(findingReview)
   } catch (err) {
     res.status(404).json({
@@ -18,7 +18,7 @@ const addReview = async (req, res) => {
       productId: req.body.productId,
       name: req.body.name,
       content: req.body.content,
-      date: "13 Nisan",
+      date: req.body.date,
       userId: req.body.userId,
       star: req.body.star,
       like: 0,
