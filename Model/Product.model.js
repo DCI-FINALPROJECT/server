@@ -43,6 +43,10 @@ const productSchema = new Schema({
     },
     sales:{
         type:Number
+    },
+    stock:{
+        type:Array,
+        required:true
     }
 
 });

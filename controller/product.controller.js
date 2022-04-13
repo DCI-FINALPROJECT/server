@@ -43,7 +43,8 @@ const addProduct = async (req, res) => {
         data.price &&
         data.description &&
         data.images &&
-        data.quantities
+        data.quantities&&
+        data.stock
       )
     ) {
       return res.status(401).send("missing information");
@@ -64,7 +65,8 @@ const addProduct = async (req, res) => {
         reviews: data.reviews,
         stars: data.stars,
         timestamp: new Date().toISOString(),
-        sales:data.sales
+        sales:data.sales,
+        stock:data.stock
       });
 
       await product.save();
