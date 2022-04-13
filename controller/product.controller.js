@@ -31,7 +31,9 @@ const getFiveNewestProduct = async (req, res) => {
 
 const addProduct = async (req, res) => {
   const data = req.body;
-
+  const file = req.file;
+  console.log( 'file', req.file, "data", data);
+  console.log(file);
   try {
     if (
       !(
