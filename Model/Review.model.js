@@ -6,12 +6,10 @@ const reviewSchema = new Schema({
   productId: {
     type: String,
     required: true,
-    unique:true
   },
   name: {
     type: String,
     required: true,
-    unique:true
   },
   content: {
     type: String,
