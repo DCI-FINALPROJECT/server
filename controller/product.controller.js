@@ -33,7 +33,6 @@ const addProduct = async (req, res) => {
   const data = req.body;
   const file = req.file;
   console.log( 'file', req.file, "data", data);
-  console.log(file);
   try {
     if (
       !(
@@ -42,9 +41,11 @@ const addProduct = async (req, res) => {
         data.brand &&
         data.price &&
         data.description &&
-        data.images &&
-        data.quantities&&
-        data.stock
+        data.images&&
+        ["data.64GB"]&&
+        ["data.128GB"]&&
+        ["data.256GB"]&&
+        ["data.512GB"]
       )
     ) {
       return res.status(401).send("missing information");
@@ -61,12 +62,15 @@ const addProduct = async (req, res) => {
         price: data.price,
         description: data.description,
         images: data.images,
-        quantities: data.quantities,
         reviews: data.reviews,
         stars: data.stars,
         timestamp: new Date().toISOString(),
         sales:data.sales,
-        stock:data.stock
+        ["64 GB"]:data["64 GB"],
+        ["128 GB"]:data["128 GB"],
+        ["256 GB"]:data["256 GB"],
+        ["512 GB"]:data["512 GB"]
+
       });
 
       await product.save();

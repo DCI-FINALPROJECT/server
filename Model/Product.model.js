@@ -28,10 +28,6 @@ const productSchema = new Schema({
         type: Array,
         required: true
     },
-    quantities: { 
-        type: Array,
-        required: true
-    },
     reviews: { 
         type: Array
     },
@@ -44,9 +40,20 @@ const productSchema = new Schema({
     sales:{
         type:Number
     },
-    stock:{
-        type:Array,
-        required:true
+    ["64 GB"]:{
+        type:Object
+    }
+    ,
+    ["128 GB"]:{
+        type:Object
+    }
+    ,
+    ["256 GB"]:{
+        type:Object
+    }
+    ,
+    ["512 GB"]:{
+        type:Object
     }
 
 });
