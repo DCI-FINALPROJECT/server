@@ -4,10 +4,14 @@ const {addProduct, getProductById, getFiveNewestProduct, getSimilarProducts, get
 const { body } = require("express-validator");
 const auth = require("../Middleware/auth.jwt.middleware");
 const Product = require("../Model/Product.model");
-
+const multer  = require('multer')
+const upload = multer({ dest: './public/data/uploads/' })
+console.log('upload',upload);
 
 // POST add new product
 router.post("/addproduct",
+
+
 
 //Validation
   body("productName").exists().withMessage("productName can not be empty"),
@@ -18,6 +22,9 @@ router.post("/addproduct",
   body("images").exists().withMessage("images can not be empty"),
   body("quantities").exists().withMessage("quantities can not be empty"),
   //body("stars").isFloat({ min: 1.0, max: 5.0 }).withMessage("stars should be between 1 und 5"),
+
+  //Multer
+upload.single('images'), 
 
 addProduct);
 
