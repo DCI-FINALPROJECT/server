@@ -8,6 +8,7 @@ const {
   getBrandsFromDataBase,
   getLatestProducts,
   getBestSellers,
+  deleteProduct,
 } = require("../controller/product.controller");
 const { body } = require("express-validator");
 const auth = require("../Middleware/auth.jwt.middleware");
@@ -37,6 +38,9 @@ router.post(
 
   addProduct
 );
+// DELETE Product
+
+router.delete("/deleteproduct/:id", deleteProduct);
 
 // GET listing newest 5 products
 router.get("/product/newestfive", getFiveNewestProduct);
@@ -57,5 +61,7 @@ router.get("/product/similar/:category/:id", getSimilarProducts);
 // GET Brands (We use this for filter Brands)
 
 router.get("/product/brands/filter", getBrandsFromDataBase);
+
+
 
 module.exports = router;

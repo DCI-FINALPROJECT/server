@@ -28,11 +28,27 @@ const getFiveNewestProduct = async (req, res) => {
     });
   }
 };
+const deleteProduct = async (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+
+  try {
+    const deletedProduct =await Product.findByIdAndDelete({ _id: id });
+    res
+      .status(200)
+      .json({ message: "product is deleted", product: deletedProduct });
+  } catch (err) {
+    res.status(404).json({
+      status: "404",
+      message: err,
+    });
+  }
+};
 
 const addProduct = async (req, res) => {
   const data = req.body;
   const file = req.file;
-  console.log( 'file', req.file, "data", data);
+  console.log("file", req.file, "data", data);
   console.log(file);
   try {
     if (
@@ -64,7 +80,7 @@ const addProduct = async (req, res) => {
         reviews: data.reviews,
         stars: data.stars,
         timestamp: new Date().toISOString(),
-        sales:data.sales
+        sales: data.sales,
       });
 
       await product.save();
@@ -84,7 +100,7 @@ const addProduct = async (req, res) => {
 
 const getLatestProducts = async (req, res) => {
   try {
-    const findedProducts = await Product.find().sort({_id:-1});
+    const findedProducts = await Product.find().sort({ _id: -1 });
 
     res.json(findedProducts);
   } catch (err) {
@@ -99,7 +115,7 @@ const getLatestProducts = async (req, res) => {
 
 const getBestSellers = async (req, res) => {
   try {
-    const findedProducts = await Product.find().sort({sales:-1});
+    const findedProducts = await Product.find().sort({ sales: -1 });
 
     res.json(findedProducts);
   } catch (err) {
@@ -140,28 +156,24 @@ const getSimilarProducts = async (req, res) => {
 
 const getBrandsFromDataBase = async (req, res) => {
   try {
-    
-
-   const result = (await Product.find()).reduce((acc,cur) => {
-      if (!acc[cur.brand]){
-        acc[cur.brand] =1
-      }else{
+    const result = (await Product.find()).reduce((acc, cur) => {
+      if (!acc[cur.brand]) {
+        acc[cur.brand] = 1;
+      } else {
         acc[cur.brand]++;
       }
 
       return acc;
-    },{});    
+    }, {});
 
-    const arr = [Object.keys(result),Object.values(result)];
+    const arr = [Object.keys(result), Object.values(result)];
 
     const brands = [];
 
-    for(let i=0;i<Object.keys(result).length;i++){
-
-      let obj = {[Object.keys(result)[i]]:Object.values(result)[i]}
+    for (let i = 0; i < Object.keys(result).length; i++) {
+      let obj = { [Object.keys(result)[i]]: Object.values(result)[i] };
 
       brands.push(obj);
-
     }
 
     res.json(brands);
@@ -175,10 +187,11 @@ const getBrandsFromDataBase = async (req, res) => {
 
 module.exports = {
   addProduct,
+  deleteProduct,
   getProductById,
   getLatestProducts,
   getFiveNewestProduct,
   getSimilarProducts,
   getBrandsFromDataBase,
-  getBestSellers
+  getBestSellers,
 };
