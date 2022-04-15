@@ -32,7 +32,7 @@ const getFiveNewestProduct = async (req, res) => {
 const addProduct = async (req, res) => {
   const data = req.body;
   const file = req.file;
-  console.log( 'file', req.file, "data", data);
+  console.log("file", req.file, "data", data);
   try {
     if (
       !(
@@ -41,11 +41,9 @@ const addProduct = async (req, res) => {
         data.brand &&
         data.price &&
         data.description &&
-        data.images&&
-        ["data.64GB"]&&
-        ["data.128GB"]&&
-        ["data.256GB"]&&
-        ["data.512GB"]
+        data.images &&
+        data.capacity &&
+        data.stock
       )
     ) {
       return res.status(401).send("missing information");
@@ -65,12 +63,10 @@ const addProduct = async (req, res) => {
         reviews: data.reviews,
         stars: data.stars,
         timestamp: new Date().toISOString(),
-        sales:data.sales,
-        ["64 GB"]:data["64 GB"],
-        ["128 GB"]:data["128 GB"],
-        ["256 GB"]:data["256 GB"],
-        ["512 GB"]:data["512 GB"]
-
+        sales: data.sales,
+        capacity: data.capacity,
+        stock: data.stock,
+        productDetails: data.productName + "-" + data.capacity,
       });
 
       await product.save();
@@ -90,7 +86,7 @@ const addProduct = async (req, res) => {
 
 const getLatestProducts = async (req, res) => {
   try {
-    const findedProducts = await Product.find().sort({_id:-1});
+    const findedProducts = await Product.find().sort({ _id: -1 });
 
     res.json(findedProducts);
   } catch (err) {
@@ -105,7 +101,7 @@ const getLatestProducts = async (req, res) => {
 
 const getBestSellers = async (req, res) => {
   try {
-    const findedProducts = await Product.find().sort({sales:-1});
+    const findedProducts = await Product.find().sort({ sales: -1 });
 
     res.json(findedProducts);
   } catch (err) {
@@ -123,7 +119,6 @@ const getSimilarProducts = async (req, res) => {
     const params = req.params;
     const category = params.category;
     const id = params.id;
-
 
     const similarProducts = await Product.find({
       category: category,
@@ -145,35 +140,52 @@ const getSimilarProducts = async (req, res) => {
 
 const getBrandsFromDataBase = async (req, res) => {
   try {
-
-
-   const result = (await Product.find({category:req.params.category})).reduce((acc,cur) => {
-      if (!acc[cur.brand]){
-        acc[cur.brand] =1
-      }else{
+    const result = (
+      await Product.find({ category: req.params.category })
+    ).reduce((acc, cur) => {
+      if (!acc[cur.brand]) {
+        acc[cur.brand] = 1;
+      } else {
         acc[cur.brand]++;
       }
 
       return acc;
-    },{});  
-    
-    console.log(result);
+    }, {});
 
-    const arr = [Object.keys(result),Object.values(result)];
+    const arr = [Object.keys(result), Object.values(result)];
 
     const brands = [];
 
-    for(let i=0;i<Object.keys(result).length;i++){
-
-      let obj = {[Object.keys(result)[i]]:Object.values(result)[i]}
+    for (let i = 0; i < Object.keys(result).length; i++) {
+      let obj = { [Object.keys(result)[i]]: Object.values(result)[i] };
 
       brands.push(obj);
-
     }
 
     res.json(brands);
   } catch (err) {
     res.json({
+      status: 404,
+      message: err,
+    });
+  }
+};
+
+// GET PRODUCT BY CAPACITY
+
+const getProductByCapacity = async (req, res) => {
+  try {
+    const params = req.params;
+    console.log(params);
+
+    const findingElement = await Product.findOne({
+      productName: params.productName,
+      capacity: params.capacity,
+    });
+
+    res.status(200).json({id:findingElement._id.toString()});
+  } catch (err) {
+    res.status(404).json({
       status: 404,
       message: err,
     });
@@ -187,5 +199,6 @@ module.exports = {
   getFiveNewestProduct,
   getSimilarProducts,
   getBrandsFromDataBase,
-  getBestSellers
+  getBestSellers,
+  getProductByCapacity,
 };
