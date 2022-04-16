@@ -7,6 +7,9 @@ const reviewSchema = new Schema({
     type: String,
     required: true,
   },
+  productName:{
+    type:String
+  },
   name: {
     type: String,
     required: true,

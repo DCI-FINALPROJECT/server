@@ -1,5 +1,24 @@
 const Product = require("../Model/Product.model.js");
 const { validationResult } = require("express-validator");
+const filterProductsWithProductName = require("../helpers/filterProductsWithProductName.js");
+
+
+const getAllProducts = async(req,res)=>{
+
+  try{
+
+    const allProducts = await Product.find();
+
+    res.json(allProducts)
+
+  }catch(err){
+    res.json({
+      status:404,
+      message:err
+    })
+  }
+}
+
 
 const getProductById = async (req, res) => {
   try {
@@ -83,7 +102,8 @@ const addProduct = async (req, res) => {
         sales: data.sales,
         capacity: data.capacity,
         stock: data.stock,
-        productDetails: data.productName + "-" + data.capacity
+        productNameWithCapacity: data.productName + "-" + data.capacity,
+
       });
 
       await product.save();
@@ -103,9 +123,13 @@ const addProduct = async (req, res) => {
 
 const getLatestProducts = async (req, res) => {
   try {
-    const findedProducts = await Product.find().sort({ _id: -1 });
+    const foundedProducts = await Product.find().limit(20).sort({ _id: -1 });
 
-    res.json(findedProducts);
+
+    const result = await filterProductsWithProductName(foundedProducts); // HELPER USED HERE :) SUPEERRR
+
+
+    res.json(result);
   } catch (err) {
     res.status(404).json({
       status: "404",
@@ -118,9 +142,11 @@ const getLatestProducts = async (req, res) => {
 
 const getBestSellers = async (req, res) => {
   try {
-    const findedProducts = await Product.find().sort({ sales: -1 });
+    const foundedProducts = await Product.find().sort({ sales: -1 });
 
-    res.json(findedProducts);
+    const result = await filterProductsWithProductName(foundedProducts)
+
+    res.json(result);
   } catch (err) {
     res.status(404).json({
       status: "404",
@@ -136,17 +162,19 @@ const getSimilarProducts = async (req, res) => {
     const params = req.params;
     const category = params.category;
     const id = params.id;
+    const productName = params.productName;
 
 
     const similarProducts = await Product.find({
       category: category,
       _id: { $nin: id },
-      productName:{$nin:"APPLE iPhone 12 5G Red Dual SIM"}
+      productName:{$nin:productName}
     }).limit(6);
 
-    console.log(similarProducts);
+    const result = await filterProductsWithProductName(similarProducts);
 
-    res.json(similarProducts);
+
+    res.json(result);
   } catch (err) {
     res.json({
       status: 404,
@@ -221,5 +249,6 @@ module.exports = {
   getSimilarProducts,
   getBrandsFromDataBase,
   getBestSellers,
-  getProductByCapacity
+  getProductByCapacity,
+  getAllProducts
 };
