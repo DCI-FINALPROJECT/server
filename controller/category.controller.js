@@ -12,6 +12,11 @@ const getNumberOfCategory = async (req, res) => {
       ? ""
       : req.query.brands;
 
+  const capacities =
+    req.query.capacities === null || req.query.capacities === ""
+      ? ""
+      : req.query.capacities;
+
   let minPrice = parseInt(req.query.min) === null ? 0 : parseInt(req.query.min);
   let maxPrice = parseInt(req.query.max) === null ? 0 : parseInt(req.query.max);
 
@@ -20,6 +25,7 @@ const getNumberOfCategory = async (req, res) => {
     brands: brands,
     min: minPrice,
     max: maxPrice,
+    capacities:capacities
   }; // EQUAL WITH =  {category:category,brands:brands,min:min,max:max}
 
   if (brands !== "") {
@@ -27,6 +33,17 @@ const getNumberOfCategory = async (req, res) => {
 
     if (array.length > 0) {
       filteringCriteria["brand"] = {
+        $in: array,
+      };
+    }
+  }
+
+
+  if (capacities !== "") {
+    const array = capacities.split(",");
+
+    if (array.length > 0) {
+      filteringCriteria["capacity"] = {
         $in: array,
       };
     }
@@ -68,13 +85,15 @@ const getCategoryWithPage = async (req, res) => {
     const page = req.params.whichPage;
     const choise = req.query.choise;
     const brands = req.query.brands;
-
+    const capacities = req.query.capacities;
     let minPrice = parseInt(req.query.min);
     let maxPrice = parseInt(req.query.max);
 
-    console.log(minPrice, maxPrice);
+    console.log("CPS2:",capacities, "mcmcmc");
+
 
     let brandsArray = [];
+    let capacitiesArray = [];
     let filteringCriteria;
 
     if (brands !== "") {
@@ -84,6 +103,19 @@ const getCategoryWithPage = async (req, res) => {
         category: req.params.category,
         brand: {
           $in: brandsArray,
+        },
+      };
+    } else {
+      filteringCriteria = { category: req.params.category };
+    }
+
+    if (capacities !== "") {
+      capacitiesArray = capacities.split(",");
+
+      filteringCriteria = {
+        category: req.params.category,
+        capacity: {
+          $in: capacitiesArray,
         },
       };
     } else {
@@ -140,7 +172,7 @@ const createCategory = async (req, res) => {
     };
 
     const createdCategory = await Category.create(category);
-    res.json(createdCategory)
+    res.json(createdCategory);
   } catch (err) {
     res.status(404).json({ status: 404, message: err });
   }
