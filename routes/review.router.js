@@ -4,7 +4,7 @@ const router = express.Router();
 
 
 
-router.get("/review/:id",getReviewById);
+router.get("/review/:productName",getReviewById);
 
 router.post("/review/addReview",addReview);
 

@@ -7,6 +7,9 @@ const productSchema = new Schema({
     type: String,
     required: true,
   },
+  productNameWithCapacity:{
+      type:String
+  },
   category: {
     type: String,
     required: true,
@@ -56,9 +59,6 @@ const productSchema = new Schema({
     Blue: {
       type: Number,
     },
-  },
-  productDetails:{
-      type:String
   }
 });
 

@@ -9,6 +9,7 @@ const {
   getLatestProducts,
   getBestSellers,
   getProductByCapacity,
+  getAllProducts
 } = require("../controller/product.controller");
 const { body } = require("express-validator");
 const auth = require("../Middleware/auth.jwt.middleware");
@@ -44,7 +45,9 @@ router.get("/product/newestfive", getFiveNewestProduct);
 
 // GET listing all products !!!! WE WILL CHANGE THIS API, LATER
 
-router.get("/products/all", getLatestProducts);
+router.get("/products/all",getAllProducts);
+
+router.get("/products/newProducts", getLatestProducts);
 
 router.get("/products/bestSellers", getBestSellers);
 
@@ -53,7 +56,7 @@ router.get("/product/:id", getProductById);
 
 // GET Similar Products
 
-router.get("/product/similar/:category/:id", getSimilarProducts);
+router.get("/product/similar/:category/:id/:productName", getSimilarProducts);
 
 // GET Brands (We use this for filter Brands)
 
