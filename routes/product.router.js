@@ -9,6 +9,7 @@ const {
   getLatestProducts,
   getBestSellers,
   deleteProduct,
+  getProductByCapacity
 } = require("../controller/product.controller");
 const { body } = require("express-validator");
 const auth = require("../Middleware/auth.jwt.middleware");
@@ -30,7 +31,7 @@ router.post(
     .withMessage("price can not be empty or price should be a float"),
   body("description").exists().withMessage("description can not be empty"),
   body("images").exists().withMessage("images can not be empty"),
-  body("quantities").exists().withMessage("quantities can not be empty"),
+  body("capacity").exists().withMessage("capacity must be written"),
   //body("stars").isFloat({ min: 1.0, max: 5.0 }).withMessage("stars should be between 1 und 5"),
 
   //Multer
@@ -60,7 +61,15 @@ router.get("/product/similar/:category/:id", getSimilarProducts);
 
 // GET Brands (We use this for filter Brands)
 
-router.get("/product/brands/filter", getBrandsFromDataBase);
+
+router.get("/product/brands/filter/:category",getBrandsFromDataBase);
+
+// GET PRODUCT BY CAPACITY
+
+router.get("/product/capacity/:productName/:capacity",getProductByCapacity);
+
+
+
 
 
 

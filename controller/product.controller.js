@@ -49,7 +49,7 @@ const addProduct = async (req, res) => {
   const data = req.body;
   const file = req.file;
   console.log("file", req.file, "data", data);
-  console.log(file);
+
   try {
     if (
       !(
@@ -59,7 +59,8 @@ const addProduct = async (req, res) => {
         data.price &&
         data.description &&
         data.images &&
-        data.quantities
+        data.capacity &&
+        data.stock
       )
     ) {
       return res.status(401).send("missing information");
@@ -76,11 +77,13 @@ const addProduct = async (req, res) => {
         price: data.price,
         description: data.description,
         images: data.images,
-        quantities: data.quantities,
         reviews: data.reviews,
         stars: data.stars,
         timestamp: new Date().toISOString(),
         sales: data.sales,
+        capacity: data.capacity,
+        stock: data.stock,
+        productDetails: data.productName + "-" + data.capacity
       });
 
       await product.save();
@@ -134,12 +137,12 @@ const getSimilarProducts = async (req, res) => {
     const category = params.category;
     const id = params.id;
 
-    console.log("Kategori:", category);
 
     const similarProducts = await Product.find({
       category: category,
       _id: { $nin: id },
-    });
+      productName:{$nin:"APPLE iPhone 12 5G Red Dual SIM"}
+    }).limit(6);
 
     console.log(similarProducts);
 
@@ -156,7 +159,10 @@ const getSimilarProducts = async (req, res) => {
 
 const getBrandsFromDataBase = async (req, res) => {
   try {
-    const result = (await Product.find()).reduce((acc, cur) => {
+
+    const result = (
+      await Product.find({ category: req.params.category })
+    ).reduce((acc, cur) => {
       if (!acc[cur.brand]) {
         acc[cur.brand] = 1;
       } else {
@@ -185,6 +191,27 @@ const getBrandsFromDataBase = async (req, res) => {
   }
 };
 
+// GET PRODUCT BY CAPACITY
+
+const getProductByCapacity = async (req, res) => {
+  try {
+    const params = req.params;
+    console.log(params);
+
+    const findingElement = await Product.findOne({
+      productName: params.productName,
+      capacity: params.capacity,
+    });
+
+    res.status(200).json({id:findingElement._id.toString()});
+  } catch (err) {
+    res.status(404).json({
+      status: 404,
+      message: err,
+    });
+  }
+};
+
 module.exports = {
   addProduct,
   deleteProduct,
@@ -194,4 +221,5 @@ module.exports = {
   getSimilarProducts,
   getBrandsFromDataBase,
   getBestSellers,
+  getProductByCapacity
 };
