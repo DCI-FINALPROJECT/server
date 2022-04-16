@@ -28,11 +28,28 @@ const getFiveNewestProduct = async (req, res) => {
     });
   }
 };
+const deleteProduct = async (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+
+  try {
+    const deletedProduct =await Product.findByIdAndDelete({ _id: id });
+    res
+      .status(200)
+      .json({ message: "product is deleted", product: deletedProduct });
+  } catch (err) {
+    res.status(404).json({
+      status: "404",
+      message: err,
+    });
+  }
+};
 
 const addProduct = async (req, res) => {
   const data = req.body;
   const file = req.file;
   console.log("file", req.file, "data", data);
+
   try {
     if (
       !(
@@ -66,7 +83,7 @@ const addProduct = async (req, res) => {
         sales: data.sales,
         capacity: data.capacity,
         stock: data.stock,
-        productDetails: data.productName + "-" + data.capacity,
+        productDetails: data.productName + "-" + data.capacity
       });
 
       await product.save();
@@ -142,6 +159,7 @@ const getSimilarProducts = async (req, res) => {
 
 const getBrandsFromDataBase = async (req, res) => {
   try {
+
     const result = (
       await Product.find({ category: req.params.category })
     ).reduce((acc, cur) => {
@@ -196,11 +214,12 @@ const getProductByCapacity = async (req, res) => {
 
 module.exports = {
   addProduct,
+  deleteProduct,
   getProductById,
   getLatestProducts,
   getFiveNewestProduct,
   getSimilarProducts,
   getBrandsFromDataBase,
   getBestSellers,
-  getProductByCapacity,
+  getProductByCapacity
 };
