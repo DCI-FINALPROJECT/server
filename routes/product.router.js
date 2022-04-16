@@ -20,7 +20,7 @@ const upload = multer({ dest: "./public/data/uploads/" });
 
 // POST add new product
 router.post(
-  "/addproduct",
+  "/admin/addproduct",
 
   //Validation
   body("productName").exists().withMessage("productName can not be empty"),
@@ -42,7 +42,8 @@ router.post(
 );
 // DELETE Product
 
-router.delete("/deleteproduct/:id",auth, deleteProduct);
+
+router.delete("/admin/deleteproduct/:id",auth, deleteProduct);
 
 // GET listing newest 5 products
 router.get("/product/newestfive", getFiveNewestProduct);
