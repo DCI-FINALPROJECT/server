@@ -1,6 +1,5 @@
 // PASSPORTJS
 
-
 const bcrypt = require("bcrypt");
 
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -18,17 +17,15 @@ passport.use(
       callbackURL: "/auth/google/callback",
     },
     async function (accessToken, refreshToken, profile, done) {
+      try {
+        //  If user is not in our database, we create new user in database.
 
-
-        
-        try {
-
-        //  If user is not in our database, we create new user in database.   
-
+        console.log(profile);
 
         const emailFromPassportLogin = profile._json.email;
         const firstNameFromPassportLogin = profile._json.given_name;
         const lastNameFromPassportLogin = profile._json.family_name;
+        const profilePhoto = profile._json.picture;
         const hashedPasswordFromPassportLogin = await bcrypt.hash(
           profile._json.email,
           10
@@ -43,6 +40,7 @@ passport.use(
           lastName: lastNameFromPassportLogin,
           email: emailFromPassportLogin,
           password: hashedPasswordFromPassportLogin,
+          photo:profilePhoto,
           address: "",
           phone: "",
         };
@@ -68,4 +66,3 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((user, done) => {
   done(null, user);
 });
-

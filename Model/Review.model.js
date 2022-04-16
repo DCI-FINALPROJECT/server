@@ -3,10 +3,6 @@ const { Schema, model } = mongoose;
 const SchemaTypes = mongoose.Schema.Types;
 
 const reviewSchema = new Schema({
-  productId: {
-    type: String,
-    required: true,
-  },
   productName:{
     type:String
   },
@@ -26,6 +22,9 @@ const reviewSchema = new Schema({
   },
   star:{
       type:Number
+  },
+  photo:{
+    type:String
   },
   like:{
       type:Number

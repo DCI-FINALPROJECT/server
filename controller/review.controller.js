@@ -13,18 +13,18 @@ const getReviewById = async (req, res) => {
 };
 
 const addReview = async (req, res) => {
-  try {
 
-    const productName="SAMSUNG Galaxy A52s 5G Dual SIM" // This content will come from review button (with params), later.
+  console.log("REW:",req.body);
+
+  try {   
 
     const review = {
-      productId: req.body.productId,
-      productName:productName,
+      productName:req.body.productName,
       name: req.body.name,
-      content: req.body.content,
-      date: req.body.date,
+      content: req.body.review,
       userId: req.body.userId,
       star: req.body.star,
+      photo:req.body.photo,
       like: 0,
       dislike: 0,
     };

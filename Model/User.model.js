@@ -21,6 +21,9 @@ const userSchema = new Schema({
     type: String,
     // select:false  ATTENTION: This statement should be added!
   },
+  photo:{
+    type:String
+  },
   address: {
     type: String,
   },
