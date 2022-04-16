@@ -120,9 +120,11 @@ const getSimilarProducts = async (req, res) => {
     const category = params.category;
     const id = params.id;
 
+
     const similarProducts = await Product.find({
       category: category,
       _id: { $nin: id },
+      productName:{$nin:"APPLE iPhone 12 5G Red Dual SIM"}
     }).limit(6);
 
     console.log(similarProducts);
