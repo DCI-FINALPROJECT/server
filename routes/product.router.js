@@ -42,7 +42,7 @@ router.post(
 );
 // DELETE Product
 
-router.delete("/deleteproduct/:id", deleteProduct);
+router.delete("/deleteproduct/:id",auth, deleteProduct);
 
 // GET listing newest 5 products
 router.get("/product/newestfive", getFiveNewestProduct);
