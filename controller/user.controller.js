@@ -92,7 +92,7 @@ const findUserController = async (req, res) => {
   
     const result = jwt.verify(gettingToken,jwt_secret_key);
   
-    console.log(result);
+    console.log("RESULT: ",result);
   
     const emailFromToken = result.email;
   
