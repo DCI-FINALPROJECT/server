@@ -25,7 +25,7 @@ const getNumberOfCategory = async (req, res) => {
     brands: brands,
     min: minPrice,
     max: maxPrice,
-    capacities:capacities
+    capacities: capacities,
   }; // EQUAL WITH =  {category:category,brands:brands,min:min,max:max}
 
   if (brands !== "") {
@@ -37,7 +37,6 @@ const getNumberOfCategory = async (req, res) => {
       };
     }
   }
-
 
   if (capacities !== "") {
     const array = capacities.split(",");
@@ -82,19 +81,22 @@ const getCategoryWithPage = async (req, res) => {
   // "/category/:category/:whichPage"  related api for this controller
 
   try {
-    const page = req.params.whichPage;
-    const choise = req.query.choise;
-    const brands = req.query.brands;
+    const page = await req.params.whichPage;
+    const choise =await req.query.choise;
+    const brands =await req.query.brands;
+    const ratings = await req.query.ratings;
     const capacities = req.query.capacities;
     let minPrice = parseInt(req.query.min);
     let maxPrice = parseInt(req.query.max);
 
-    console.log("CPS2:",capacities, "mcmcmc");
+    console.log("cpa1",capacities);
 
+    console.log("CPS2:", ratings, "mcmcmc");
 
     let brandsArray = [];
     let capacitiesArray = [];
     let filteringCriteria;
+
 
     if (brands !== "") {
       brandsArray = brands.split(",");
@@ -112,31 +114,43 @@ const getCategoryWithPage = async (req, res) => {
     if (capacities !== "") {
       capacitiesArray = capacities.split(",");
 
-      filteringCriteria = {
-        category: req.params.category,
-        capacity: {
-          $in: capacitiesArray,
-        },
+      filteringCriteria["capacity"] = {
+        $in: capacitiesArray,
       };
     } else {
-      filteringCriteria = { category: req.params.category };
+      filteringCriteria = {
+        category: req.params.category,
+        brand: {
+          $in: brandsArray,
+        },
+      };
     }
 
+    console.log("RRRRRRRR",ratings);
+
+    if(brands === "" && capacities === "" && ratings === ""){
+
+      filteringCriteria = { category: req.params.category }
+    }
+    
+    console.log(capacities);
+
+    
     if (minPrice > 0 && maxPrice === 0) {
       maxPrice = 9999999999;
     }
-
+    
     if (
       (minPrice === 0 && maxPrice > 0) ||
       (minPrice > 0 && maxPrice === 0) ||
       (minPrice > 0 && maxPrice > 0)
-    ) {
-      filteringCriteria["price"] = {
-        $gt: minPrice,
-        $lt: maxPrice,
-      };
-    }
-
+      ) {
+        filteringCriteria["price"] = {
+          $gt: minPrice,
+          $lt: maxPrice,
+        };
+      }
+      
     let criterion = {};
 
     if (choise === "1") {
@@ -146,6 +160,8 @@ const getCategoryWithPage = async (req, res) => {
     } else if (choise === "3") {
       criterion = { price: 1 }; // This is for price
     }
+
+    console.log("FIL CRE:",filteringCriteria);
 
     const result = await Product.find(filteringCriteria)
       .sort(criterion)
