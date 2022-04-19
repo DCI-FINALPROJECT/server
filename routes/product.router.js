@@ -10,7 +10,8 @@ const {
   getBestSellers,
   getProductByCapacity,
   getAllProducts,
-  deleteProduct
+  deleteProduct,
+  updateProduct
 } = require("../controller/product.controller");
 const { body } = require("express-validator");
 const auth = require("../Middleware/auth.jwt.middleware");
@@ -41,15 +42,15 @@ router.post(
   addProduct
 );
 // DELETE Product
-
-
 router.delete("/admin/deleteproduct/:id",auth, deleteProduct);
+
+// UPDATE Product
+router.put("/admin/updateproduct/:id", updateProduct);
 
 // GET listing newest 5 products
 router.get("/product/newestfive", getFiveNewestProduct);
 
 // GET listing all products !!!! WE WILL CHANGE THIS API, LATER
-
 router.get("/products/all",getAllProducts);
 
 router.get("/products/newProducts", getLatestProducts);
@@ -60,16 +61,12 @@ router.get("/products/bestSellers", getBestSellers);
 router.get("/product/:id", getProductById);
 
 // GET Similar Products
-
 router.get("/product/similar/:category/:id/:productName", getSimilarProducts);
 
 // GET Brands (We use this for filter Brands)
-
-
 router.get("/product/brands/filter/:category",getBrandsFromDataBase);
 
 // GET PRODUCT BY CAPACITY
-
 router.get("/product/capacity/:productName/:capacity",getProductByCapacity);
 
 
