@@ -1,3 +1,4 @@
+const Product = require("../Model/Product.model");
 const Review = require("../Model/Review.model");
 
 const getReviewById = async (req, res) => {
@@ -29,6 +30,30 @@ const addReview = async (req, res) => {
       dislike: 0,
     };
     await Review.create(review);
+
+    const reviews = await Review.find({});   
+    
+    
+    let total = 0;    
+    reviews.map(element=>{
+      
+
+      total += element.star;
+
+      return total;
+    });
+    
+    let avarageStar = (total/reviews.length).toFixed(0);
+
+    const products = await Product.find({productName:review.productName});
+
+    products.forEach(product=>{
+
+      await 
+
+    })
+
+
 
     res.json(review);
   } catch (err) {

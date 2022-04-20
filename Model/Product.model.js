@@ -30,8 +30,8 @@ const productSchema = new Schema({
     type: Array,
     required: true,
   },
-  reviews: {
-    type: Array,
+  averageStar: {
+    type: Number,
   },
   stars: {
     type: String,

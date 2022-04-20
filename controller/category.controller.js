@@ -84,14 +84,12 @@ const getCategoryWithPage = async (req, res) => {
     const page = await req.params.whichPage;
     const choise =await req.query.choise;
     const brands =await req.query.brands;
-    const ratings = await req.query.ratings;
     const capacities = req.query.capacities;
     let minPrice = parseInt(req.query.min);
     let maxPrice = parseInt(req.query.max);
 
     console.log("cpa1",capacities);
 
-    console.log("CPS2:", ratings, "mcmcmc");
 
     let brandsArray = [];
     let capacitiesArray = [];
@@ -126,9 +124,8 @@ const getCategoryWithPage = async (req, res) => {
       };
     }
 
-    console.log("RRRRRRRR",ratings);
 
-    if(brands === "" && capacities === "" && ratings === ""){
+    if(brands === "" && capacities === ""){
 
       filteringCriteria = { category: req.params.category }
     }
