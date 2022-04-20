@@ -88,7 +88,10 @@ const addProduct = async (req, res) => {
     const errors = validationResult(req);
     const isValid = errors.isEmpty();
 
+
     if (isValid) {
+
+
       const product = new Product({
         productName: data.productName,
         category: data.category,
@@ -96,13 +99,12 @@ const addProduct = async (req, res) => {
         price: data.price,
         description: data.description,
         images: data.images,
-        reviews: data.reviews,
-        stars: data.stars,
         timestamp: new Date().toISOString(),
         sales: data.sales,
         capacity: data.capacity,
         stock: data.stock,
         productNameWithCapacity: data.productName + "-" + data.capacity,
+        averageStar:data.averageStar
 
       });
 
