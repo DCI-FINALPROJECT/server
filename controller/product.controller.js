@@ -132,8 +132,7 @@ const addProduct = async (req, res) => {
         sales: data.sales,
         capacity: data.capacity,
         stock: data.stock,
-        productNameWithCapacity: data.productName + "-" + data.capacity,
-        averageStar:data.averageStar
+        productNameWithCapacity: data.productName + "-" + data.capacity
 
       });
 
