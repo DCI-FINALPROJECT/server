@@ -25,12 +25,6 @@ const reviewSchema = new Schema({
   },
   photo:{
     type:String
-  },
-  like:{
-      type:Number
-  },
-  dislike:{
-      type:Number
   }
 });
 
