@@ -11,13 +11,19 @@ const passportSetUp = require("./helpers/passportjs")
 const cookieSession = require("cookie-session");
 const authRoute = require("./Middleware/auth.passportjs");
 const cors = require("cors");
+// This is your test secret API key.
+const stripe = require("stripe")(process.env.STRIPE);
+
+
 
 const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
+const usersRouter = require("./routes/users.router");
 const productsRouter = require("./routes/product.router");
 const categoryRouter = require("./routes/category.router");
 const reviewRouter = require("./routes/review.router");
 const capacityRouter = require("./routes/capacity.router");
+const stripeRouter = require("./routes/stripe.router");
+const orderRouter = require("./routes/order.router");
 
 const app = express();
 
@@ -63,6 +69,8 @@ app.use("/",categoryRouter);
 app.use("/",reviewRouter);
 app.use("/",capacityRouter);
 app.use("/auth", authRoute);
+app.use("/api/checkout", stripeRouter);
+app.use("/",orderRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -86,6 +94,34 @@ const URI = process.env.MONGOOSE;
 
 mongoose.connect(URI, (err) => {
   console.log("Connected to DB");
+});
+
+
+const calculateOrderAmount = (items) => {
+  // Replace this constant with a calculation of the order's amount
+  // Calculate the order total on the server to prevent
+  // people from directly manipulating the amount on the client
+  return 1400;
+};
+
+
+//  PAYMENTS
+
+app.post("/create-payment-intent", async (req, res) => {
+  const { items } = req.body;
+
+  // Create a PaymentIntent with the order amount and currency
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: calculateOrderAmount(items),
+    currency: "eur",
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
+
+  res.send({
+    clientSecret: paymentIntent.client_secret,
+  });
 });
 
 module.exports = app;
