@@ -4,6 +4,7 @@ const {
   userPageAuth,
   userLoginController,
   findUserController,
+  updateUser,
 } = require("../controller/user.controller");
 var router = express.Router();
 const { body } = require("express-validator");
@@ -44,5 +45,7 @@ router.get("/userpage", auth, userPageAuth);
 router.post("/userlogin", userLoginController);
 
 router.get("/finduser", findUserController);
+
+router.patch("/updateuser", updateUser);
 
 module.exports = router;
