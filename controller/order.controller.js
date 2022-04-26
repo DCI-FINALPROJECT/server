@@ -10,11 +10,12 @@ const calculateOrderAmount = (items) => {
   return total;
 };
 
-const createOrder = async (req, res) => {
+const createOrder = async (req, res) => { 
+
   try {
     const products = req.body.products;
     const paymentId = await req.body.stripeToken.card.id;
-    const userId = await req.body.stripeToken.card.name;
+    const userId = await req.body.userId;
     const date = new Date();
     const orderNumber =
       date.getFullYear() +
