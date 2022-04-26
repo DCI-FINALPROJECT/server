@@ -12,7 +12,7 @@ const addNewUser = async (req, res) => {
 
   try {
     if (isValid) {
-      const { firstName, lastName, email, password, address, phone } = req.body;
+      const { firstName, lastName, email, password, address, phone,birthday } = req.body;
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = {
         firstName,
@@ -21,6 +21,7 @@ const addNewUser = async (req, res) => {
         password: hashedPassword,
         address,
         phone,
+        birthday
       };
       await User.create(newUser);
 
@@ -66,7 +67,11 @@ const userLoginController = async (req, res) => {
 
       console.log(userToken);
 
-      return res.json({ userToken, userInformation,message:"Successfully login" });
+      return res.json({
+        userToken,
+        userInformation,
+        message: "Successfully login",
+      });
     }
 
     res.json({
@@ -83,36 +88,40 @@ const userLoginController = async (req, res) => {
 };
 
 const findUserController = async (req, res) => {
-
-  try{
-
+  try {
     const authFromLogin = await req.header("Authorization");
-  
+
     const gettingToken = authFromLogin.split(" ")[1];
-  
-    const result = jwt.verify(gettingToken,jwt_secret_key);
-  
-    console.log("RESULT: ",result);
-  
+
+    const result = jwt.verify(gettingToken, jwt_secret_key);
+
+    console.log("RESULT: ", result);
+
     const emailFromToken = result.email;
-  
-    const findingUser = await User.findOne({email:emailFromToken});
 
-    if(findingUser){
-      return res.json({user:findingUser,message:"Successfully authorized"});
+    const findingUser = await User.findOne({ email: emailFromToken });
 
-    }else{
-      return res.json({message:"Email or password is false!"})
+    if (findingUser) {
+      return res.json({
+        user: findingUser,
+        message: "Successfully authorized",
+      });
+    } else {
+      return res.json({ message: "Email or password is false!" });
     }
-
-
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
+};
 
+const updateUser = async (req, res) => {
 
+  const result = await User.updateOne({ _id: req.body.id }, { $set: req.body });
 
-  
+  console.log(result);
+
+  res.json(result);
+
 };
 
 module.exports = {
@@ -120,4 +129,5 @@ module.exports = {
   userPageAuth,
   userLoginController,
   findUserController,
+  updateUser,
 };

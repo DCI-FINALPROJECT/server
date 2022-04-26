@@ -43,6 +43,7 @@ passport.use(
           photo:profilePhoto,
           address: "",
           phone: "",
+          birthday:""
         };
 
         console.log("FINDING", findingUser);

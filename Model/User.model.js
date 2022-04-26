@@ -30,6 +30,9 @@ const userSchema = new Schema({
   phone: {
     type: String,
   },
+  birthday:{
+    type:String
+  }
 });
 
 const User = model("user", userSchema, "user");
