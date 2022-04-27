@@ -5,7 +5,6 @@ const KEY = process.env.STRIPE;
 const stripe = require("stripe")(KEY);
 
 const stripeController = (req, res) => {
-  console.log(req.body.amount);
 
   stripe.charges.create(
     {

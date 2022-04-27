@@ -9,7 +9,7 @@ const orderSchema = new Schema({
   userId: {
     type: String,
   },
-  userEmail:{
+  userEmail: {
     type: String,
   },
   products: {
@@ -24,9 +24,15 @@ const orderSchema = new Schema({
   orderNumber: {
     type: String,
   },
-  status:{
-    type:Array
-  }
+  status: {
+    type: Array,
+  },
+  result: {
+    type: Boolean,
+    default: false,
+  },
+  userContact: { type: Object },
+  address: { type: String },
 });
 
 const Order = mongoose.model("Order", orderSchema);
