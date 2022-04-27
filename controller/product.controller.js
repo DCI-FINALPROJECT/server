@@ -123,7 +123,7 @@ const addProduct = async (req, res) => {
 
       const product = new Product({
         productName: data.productName,
-        category: data.category,
+        category: data.category.toUpperCase(),
         brand: data.brand,
         price: data.price,
         description: data.description,
