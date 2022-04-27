@@ -2,6 +2,7 @@ const { User } = require("../Model/User.model");
 const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
+const Order = require("../Model/Order.model");
 require("dotenv").config();
 
 const jwt_secret_key = process.env.JWT_SECRET_KEY;
@@ -12,7 +13,8 @@ const addNewUser = async (req, res) => {
 
   try {
     if (isValid) {
-      const { firstName, lastName, email, password, address, phone,birthday } = req.body;
+      const { firstName, lastName, email, password, address, phone, birthday } =
+        req.body;
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = {
         firstName,
@@ -21,7 +23,7 @@ const addNewUser = async (req, res) => {
         password: hashedPassword,
         address,
         phone,
-        birthday
+        birthday,
       };
       await User.create(newUser);
 
@@ -115,13 +117,37 @@ const findUserController = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
+  try {
+    const result = await User.updateOne(
+      { _id: req.body.id },
+      { $set: req.body }
+    );
 
-  const result = await User.updateOne({ _id: req.body.id }, { $set: req.body });
+    console.log(result);
 
-  console.log(result);
+    res.json(result);
+  } catch (err) {
+    res.status(404).json({
+      success: false,
+      message: err,
+    });
+  }
+};
 
-  res.json(result);
+const myActiveOrders = async (req, res) => {
+  try {
+    const response = await Order.find({
+      userEmail: req.body.email,
+      result: false,
+    });
 
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(404).json({
+      status: false,
+      message: err,
+    });
+  }
 };
 
 module.exports = {
@@ -130,4 +156,5 @@ module.exports = {
   userLoginController,
   findUserController,
   updateUser,
+  myActiveOrders,
 };

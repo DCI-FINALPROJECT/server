@@ -5,6 +5,7 @@ const {
   userLoginController,
   findUserController,
   updateUser,
+  myActiveOrders,
 } = require("../controller/user.controller");
 var router = express.Router();
 const { body } = require("express-validator");
@@ -47,5 +48,7 @@ router.post("/userlogin", userLoginController);
 router.get("/finduser", findUserController);
 
 router.patch("/updateuser", updateUser);
+
+router.post("/myactiveorders", myActiveOrders);
 
 module.exports = router;

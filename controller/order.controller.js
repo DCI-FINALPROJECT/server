@@ -10,7 +10,9 @@ const calculateOrderAmount = (items) => {
   return total;
 };
 
-const createOrder = async (req, res) => { 
+const createOrder = async (req, res) => {
+
+  
 
   try {
     const products = req.body.products;
@@ -25,8 +27,16 @@ const createOrder = async (req, res) => {
       date.getDate() +
       "-" +
       Math.floor(Math.random() * 999999 + 100000);
-    const amount = calculateOrderAmount(req.body.products)/100;
+    const amount = calculateOrderAmount(req.body.products) / 100;
     const userEmail = req.body.userEmail;
+    const userContact = {
+      firstName: req.body.user.firstName,
+      lastName : req.body.user.lastName,
+      email : req.body.user.email,
+      address:req.body.user.address,
+      phone: req.body.user.phone,
+    };
+    const address = req.body.address;
 
     const newOrder = {
       products,
@@ -36,6 +46,8 @@ const createOrder = async (req, res) => {
       amount,
       date,
       userEmail,
+      userContact,
+      address,
     };
 
     const response = await Order.create(newOrder);
