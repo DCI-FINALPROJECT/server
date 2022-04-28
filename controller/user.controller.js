@@ -139,7 +139,7 @@ const myActiveOrders = async (req, res) => {
     const response = await Order.find({
       userEmail: req.body.email,
       result: false,
-    });
+    }).sort({ date: -1 });
 
     res.status(200).json(response);
   } catch (err) {
