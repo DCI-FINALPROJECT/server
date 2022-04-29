@@ -42,6 +42,40 @@ const addNewUser = async (req, res) => {
   }
 };
 
+//Pass Change controller
+
+const passportChange = async (req, res)=>{
+
+  try{
+
+    const { currentPass, newPass, email } = req.body;
+  
+    const findingUser = await User.findOne({ email: email });
+  
+  
+    const isTrue = await bcrypt.compare(currentPass, findingUser.password);
+    if(isTrue && findingUser){
+
+      return res.status(200).json({
+        findingUser,
+        message: "Successfully login",
+      });
+    }else{
+      res.status(400).json({
+        message:"current password or email are false"
+      })
+
+    }
+  }catch(error){
+    console.log(err);
+    res.json({
+      status: "error",
+      message: "pass not changed",
+    });
+  }
+
+}
+
 // This controller is created to go user page with permission.
 
 const userPageAuth = (req, res) => {
@@ -157,4 +191,5 @@ module.exports = {
   findUserController,
   updateUser,
   myActiveOrders,
+  passportChange
 };

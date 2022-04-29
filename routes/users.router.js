@@ -6,10 +6,12 @@ const {
   findUserController,
   updateUser,
   myActiveOrders,
+  passportChange,
 } = require("../controller/user.controller");
 var router = express.Router();
 const { body } = require("express-validator");
 const auth = require("../Middleware/auth.jwt.middleware");
+const passport = require("passport");
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {
@@ -38,6 +40,10 @@ router.post(
 
   addNewUser
 );
+
+//user password change
+
+router.put(`/user/passchange`, passportChange);
 
 // This route is created to go user page with permission.
 
