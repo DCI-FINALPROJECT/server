@@ -10,9 +10,7 @@ const calculateOrderAmount = (items) => {
   return total;
 };
 
-const createOrder = async (req, res) => {
-
-  
+const createOrder = async (req, res) => {  
 
   try {
     const products = req.body.products;
