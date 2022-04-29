@@ -6,6 +6,7 @@ const {
   findUserController,
   updateUser,
   myActiveOrders,
+  myAllOrders,
 } = require("../controller/user.controller");
 var router = express.Router();
 const { body } = require("express-validator");
@@ -50,5 +51,7 @@ router.get("/finduser", findUserController);
 router.patch("/updateuser", updateUser);
 
 router.post("/myactiveorders", myActiveOrders);
+
+router.post("/myallorders", myAllOrders);
 
 module.exports = router;
