@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const Order = require("../Model/Order.model");
+const { findByIdAndUpdate } = require("../Model/Order.model");
 require("dotenv").config();
 
 const jwt_secret_key = process.env.JWT_SECRET_KEY;
@@ -51,13 +52,19 @@ const passportChange = async (req, res)=>{
     const { currentPass, newPass, email } = req.body;
   
     const findingUser = await User.findOne({ email: email });
-  
+    console.log("try calisiyor");
   
     const isTrue = await bcrypt.compare(currentPass, findingUser.password);
-    if(isTrue && findingUser){
+    console.log(isTrue);
+    if(findingUser && isTrue){
+      const id = findingUser._id
+
+      const hashedPassword = await bcrypt.hash(newPass, 10);
+
+      const updatedUser = await User.findByIdAndUpdate({_id:id}, {password:hashedPassword})
 
       return res.status(200).json({
-        findingUser,
+        updatedUser,
         message: "Successfully login",
       });
     }else{
@@ -66,7 +73,7 @@ const passportChange = async (req, res)=>{
       })
 
     }
-  }catch(error){
+  }catch(err){
     console.log(err);
     res.json({
       status: "error",
