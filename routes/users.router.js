@@ -44,7 +44,16 @@ router.post(
 
 //user password change
 
-router.put(`/user/passchange`, passportChange);
+router.put(`/user/passchange`,
+
+body("newPass")
+    .exists()
+    .isLength({ min: 6, max:20})
+    .withMessage(
+      "Password can not be empty and should be minimum 6 characters or maximum 20 characters!"
+    ),
+    
+passportChange);
 
 // This route is created to go user page with permission.
 

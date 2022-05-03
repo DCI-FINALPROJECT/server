@@ -48,7 +48,7 @@ const addNewUser = async (req, res) => {
 const passportChange = async (req, res)=>{
 
   try{
-
+    console.log(req.body);
     const { currentPass, newPass, email } = req.body;
   
     const findingUser = await User.findOne({ email: email });
