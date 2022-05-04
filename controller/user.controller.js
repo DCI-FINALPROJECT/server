@@ -249,7 +249,7 @@ module.exports = {
   updateUser,
   myActiveOrders,
   passportChange,
-  deleteUser
-  passportChange
+  deleteUser,
+  passportChange,
   myAllOrders
 };
