@@ -157,6 +157,38 @@ const findUserController = async (req, res) => {
   }
 };
 
+
+//User Delete controller
+const deleteUser = async (req, res) => {
+  console.log("function working");
+  try {
+    console.log("try calisiyor");
+    const  {email} = req.body;
+    console.log(email);
+    const findingUser = await User.findOne({ email: email });
+
+    if(findingUser){
+      console.log("if calisiyor");
+      const id = findingUser._id
+
+      /* const updatedUser = await User.findByIdAndDelete({_id:id}) */
+      res.status(200).json({message:"wird gelöscht"})
+
+    }else{
+      res.status(300).json(
+        {message:"Account not found"}
+      )
+    }
+
+  } catch (err) {
+    res.status(404).json({
+      success: false,
+      message: err,
+    });
+  }
+
+}
+
 const updateUser = async (req, res) => {
   try {
     const result = await User.updateOne(
@@ -198,5 +230,6 @@ module.exports = {
   findUserController,
   updateUser,
   myActiveOrders,
-  passportChange
+  passportChange,
+  deleteUser
 };

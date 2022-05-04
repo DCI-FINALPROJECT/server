@@ -7,6 +7,7 @@ const {
   updateUser,
   myActiveOrders,
   passportChange,
+  deleteUser,
 } = require("../controller/user.controller");
 var router = express.Router();
 const { body } = require("express-validator");
@@ -54,6 +55,9 @@ body("newPass")
     
 passportChange);
 
+//This route is deleted the user
+
+router.delete("/user/delete", deleteUser)
 // This route is created to go user page with permission.
 
 router.get("/userpage", auth, userPageAuth);
@@ -65,5 +69,6 @@ router.get("/finduser", findUserController);
 router.patch("/updateuser", updateUser);
 
 router.post("/myactiveorders", myActiveOrders);
+
 
 module.exports = router;
