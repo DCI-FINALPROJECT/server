@@ -201,7 +201,7 @@ const myActiveOrders = async (req, res) => {
     const response = await Order.find({
       userEmail: req.body.email,
       result: false,
-    });
+    }).sort({ date: -1 });
 
     res.status(200).json(response);
   } catch (err) {
@@ -212,6 +212,24 @@ const myActiveOrders = async (req, res) => {
   }
 };
 
+const myAllOrders = async (req, res) => {
+  try {
+    const response = await Order.find({
+      userEmail: req.body.email,
+    }).sort({ date: -1 });
+
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(404).json({
+      status: false,
+      message: err,
+    });
+  }
+};
+
+
+
+
 module.exports = {
   addNewUser,
   userPageAuth,
@@ -221,4 +239,6 @@ module.exports = {
   myActiveOrders,
   passportChange,
   deleteUser,
+  passportChange,
+  myAllOrders
 };
