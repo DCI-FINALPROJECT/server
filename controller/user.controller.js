@@ -45,43 +45,43 @@ const addNewUser = async (req, res) => {
 
 //Pass Change controller
 
-const passportChange = async (req, res)=>{
-
-  try{
+const passportChange = async (req, res) => {
+  try {
     console.log(req.body);
     const { currentPass, newPass, email } = req.body;
-  
+
     const findingUser = await User.findOne({ email: email });
     console.log("try calisiyor");
-  
+
     const isTrue = await bcrypt.compare(currentPass, findingUser.password);
     console.log(isTrue);
-    if(findingUser && isTrue){
-      const id = findingUser._id
+    if (findingUser && isTrue) {
+      const id = findingUser._id;
 
       const hashedPassword = await bcrypt.hash(newPass, 10);
 
-      const updatedUser = await User.findByIdAndUpdate({_id:id}, {password:hashedPassword})
+      const updatedUser = await User.findByIdAndUpdate(
+        { _id: id },
+        { password: hashedPassword }
+      );
 
       return res.status(200).json({
         updatedUser,
         message: "Successfully login",
       });
-    }else{
+    } else {
       res.status(400).json({
-        message:"current password or email are false"
-      })
-
+        message: "current password or email are false",
+      });
     }
-  }catch(err){
+  } catch (err) {
     console.log(err);
     res.json({
       status: "error",
       message: "pass not changed",
     });
   }
-
-}
+};
 
 // This controller is created to go user page with permission.
 
@@ -157,37 +157,26 @@ const findUserController = async (req, res) => {
   }
 };
 
-
 //User Delete controller
 const deleteUser = async (req, res) => {
-  console.log("function working");
   try {
-    console.log("try calisiyor");
-    const  {email} = req.body;
-    console.log(email);
+    const { email } = req.body;
     const findingUser = await User.findOne({ email: email });
 
-    if(findingUser){
-      console.log("if calisiyor");
-      const id = findingUser._id
-
-      /* const updatedUser = await User.findByIdAndDelete({_id:id}) */
-      res.status(200).json({message:"wird gelöscht"})
-
-    }else{
-      res.status(300).json(
-        {message:"Account not found"}
-      )
+    if (findingUser) {
+      const id = findingUser._id;
+      const updatedUser = await User.findByIdAndDelete({ _id: id });
+      res.status(200).json({ message: "wird gelöscht" });
+    } else {
+      res.status(300).json({ message: "Account not found" });
     }
-
   } catch (err) {
     res.status(404).json({
       success: false,
       message: err,
     });
   }
-
-}
+};
 
 const updateUser = async (req, res) => {
   try {
