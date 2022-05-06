@@ -2,8 +2,9 @@ const Coupon = require("../Model/Coupon.model");
 
 const getCoupon = async (req, res) => {
     try {
+
+      const couponNumber = req.params.couponNumber;
       console.log("try calisiyor");
-      const { couponNumber } = req.body;
       console.log(couponNumber);
       const findingCoupon = await Coupon.findOne({ couponNumber: couponNumber });
       console.log(findingCoupon);
@@ -15,14 +16,14 @@ const getCoupon = async (req, res) => {
           { isUsed: true }
         );
         console.log("isused", updatedCoupon);
-        res.status(200).json({amount:updatedCoupon.couponAmount})
+        res.status(200).json({amount:updatedCoupon.couponAmount, message:`${updatedCoupon.couponAmount} € coupon added`})
       } else {
-        res.status(300).json({ message: "Coupon not found" });
+        res.status(300).json({ message: "This coupon has been used before" });
       }
     } catch (err) {
       res.status(404).json({
         success: false,
-        message: err,
+        message: "Coupon Number is invalid!"
       });
     }
   };
@@ -51,7 +52,7 @@ const postCoupon = async (req, res) => {
   
 
 
-    res.send('Coupon is created')
+    res.status(200).json({message:"Coupon is created"})
       
     } catch (err) {
       res.status(400).json({
