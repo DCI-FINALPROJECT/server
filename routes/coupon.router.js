@@ -5,9 +5,9 @@ const router = express.Router();
 
 
 
-router.get("/getCoupon", getCoupon);
+router.get("/admin/getCoupon/:couponNumber", getCoupon);
 
 
-router.post("/postCoupon", postCoupon);
+router.post("/admin/postCoupon", postCoupon);
 
 module.exports = router;
