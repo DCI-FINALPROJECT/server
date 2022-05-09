@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const Order = require("../Model/Order.model");
+const { findByIdAndUpdate } = require("../Model/Order.model");
 require("dotenv").config();
 
 const jwt_secret_key = process.env.JWT_SECRET_KEY;
@@ -38,6 +39,46 @@ const addNewUser = async (req, res) => {
     res.json({
       status: "Error",
       message: err,
+    });
+  }
+};
+
+//Pass Change controller
+
+const passportChange = async (req, res) => {
+  try {
+    console.log(req.body);
+    const { currentPass, newPass, email } = req.body;
+
+    const findingUser = await User.findOne({ email: email });
+    console.log("try calisiyor");
+
+    const isTrue = await bcrypt.compare(currentPass, findingUser.password);
+    console.log(isTrue);
+    if (findingUser && isTrue) {
+      const id = findingUser._id;
+
+      const hashedPassword = await bcrypt.hash(newPass, 10);
+
+      const updatedUser = await User.findByIdAndUpdate(
+        { _id: id },
+        { password: hashedPassword }
+      );
+
+      return res.status(200).json({
+        updatedUser,
+        message: "Successfully login",
+      });
+    } else {
+      res.status(400).json({
+        message: "current password or email are false",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({
+      status: "error",
+      message: "pass not changed",
     });
   }
 };
@@ -116,6 +157,27 @@ const findUserController = async (req, res) => {
   }
 };
 
+//User Delete controller
+const deleteUser = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const findingUser = await User.findOne({ email: email });
+
+    if (findingUser) {
+      const id = findingUser._id;
+      const updatedUser = await User.findByIdAndDelete({ _id: id });
+      res.status(200).json({ message: "wird gelöscht" });
+    } else {
+      res.status(300).json({ message: "Account not found" });
+    }
+  } catch (err) {
+    res.status(404).json({
+      success: false,
+      message: err,
+    });
+  }
+};
+
 const updateUser = async (req, res) => {
   try {
     const result = await User.updateOne(
@@ -175,5 +237,8 @@ module.exports = {
   findUserController,
   updateUser,
   myActiveOrders,
+  passportChange,
+  deleteUser,
+  passportChange,
   myAllOrders
 };

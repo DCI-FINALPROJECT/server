@@ -6,11 +6,14 @@ const {
   findUserController,
   updateUser,
   myActiveOrders,
+  passportChange,
+  deleteUser,
   myAllOrders,
 } = require("../controller/user.controller");
 var router = express.Router();
 const { body } = require("express-validator");
 const auth = require("../Middleware/auth.jwt.middleware");
+const passport = require("passport");
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {
@@ -40,6 +43,22 @@ router.post(
   addNewUser
 );
 
+//user password change
+
+router.put(`/user/passchange`,
+
+body("newPass")
+    .exists()
+    .isLength({ min: 6, max:20})
+    .withMessage(
+      "Password can not be empty and should be minimum 6 characters or maximum 20 characters!"
+    ),
+    
+passportChange);
+
+//This route is deleted the user
+
+router.delete("/user/delete", deleteUser)
 // This route is created to go user page with permission.
 
 router.get("/userpage", auth, userPageAuth);
@@ -53,5 +72,6 @@ router.patch("/updateuser", updateUser);
 router.post("/myactiveorders", myActiveOrders);
 
 router.post("/myallorders", myAllOrders);
+
 
 module.exports = router;
