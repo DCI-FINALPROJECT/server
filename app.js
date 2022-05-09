@@ -24,6 +24,7 @@ const reviewRouter = require("./routes/review.router");
 const capacityRouter = require("./routes/capacity.router");
 const stripeRouter = require("./routes/stripe.router");
 const orderRouter = require("./routes/order.router");
+const adminRouter = require("./routes/admin.router");
 const couponRouter = require("./routes/coupon.router");
 
 const app = express();
@@ -72,6 +73,7 @@ app.use("/",capacityRouter);
 app.use("/auth", authRoute);
 app.use("/api/checkout", stripeRouter);
 app.use("/",orderRouter);
+app.use("/",adminRouter);
 app.use("/",couponRouter);
 
 // catch 404 and forward to error handler
