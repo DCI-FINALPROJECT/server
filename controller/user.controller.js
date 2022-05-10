@@ -110,17 +110,20 @@ const userLoginController = async (req, res) => {
 
       console.log(userToken);
 
-      return res.json({
+      res.json({
         userToken,
         userInformation,
         message: "Successfully login",
+        status: "success"
+      });
+    }else{
+
+      res.json({
+        status: "error",
+        message: "Password or E-mail are false!",
       });
     }
 
-    res.json({
-      status: "error",
-      message: "Password or E-mail are false!",
-    });
   } catch (err) {
     console.log(err);
     res.json({
