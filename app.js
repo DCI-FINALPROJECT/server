@@ -7,17 +7,13 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const passport = require("passport");
-const passportSetUp = require("./helpers/passportjs")
+const passportSetUp = require("./helpers/passportjs");
 const cookieSession = require("cookie-session");
 const authRoute = require("./Middleware/auth.passportjs");
 const cors = require("cors");
 // This is your test secret API key.
 const stripe = require("stripe")(process.env.STRIPE);
 const fileUpload = require("express-fileupload");
-
-
-
-
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users.router");
@@ -32,10 +28,7 @@ const couponRouter = require("./routes/coupon.router");
 
 const app = express();
 
-
 app.use(express.static(path.join(__dirname, "/public")));
-
-
 
 // fileUpload
 
@@ -52,7 +45,7 @@ app.use(
   })
 );
 
-// 
+//
 
 app.use(
   cookieSession({
@@ -64,7 +57,6 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -79,14 +71,14 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/", usersRouter);
 app.use("/", productsRouter);
-app.use("/",categoryRouter);
-app.use("/",reviewRouter);
-app.use("/",capacityRouter);
+app.use("/", categoryRouter);
+app.use("/", reviewRouter);
+app.use("/", capacityRouter);
 app.use("/auth", authRoute);
 app.use("/api/checkout", stripeRouter);
-app.use("/",orderRouter);
-app.use("/",adminRouter);
-app.use("/",couponRouter);
+app.use("/", orderRouter);
+app.use("/", adminRouter);
+app.use("/", couponRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -112,14 +104,12 @@ mongoose.connect(URI, (err) => {
   console.log("Connected to DB");
 });
 
-
 const calculateOrderAmount = (items) => {
   // Replace this constant with a calculation of the order's amount
   // Calculate the order total on the server to prevent
   // people from directly manipulating the amount on the client
   return 1400;
 };
-
 
 //  PAYMENTS
 
@@ -139,9 +129,5 @@ app.post("/create-payment-intent", async (req, res) => {
     clientSecret: paymentIntent.client_secret,
   });
 });
-
-
-
-
 
 module.exports = app;

@@ -138,7 +138,7 @@ const addProduct = async (req, res) => {
     description: req.body.description,
     price: req.body.price,
     sales: 0,
-    capacity: req.body.capacity,
+    capacity: req.body.capacity + " GB",
   });
 
   console.log(urun);

@@ -82,19 +82,17 @@ const getCategoryWithPage = async (req, res) => {
 
   try {
     const page = await req.params.whichPage;
-    const choise =await req.query.choise;
-    const brands =await req.query.brands;
+    const choise = await req.query.choise;
+    const brands = await req.query.brands;
     const capacities = req.query.capacities;
     let minPrice = parseInt(req.query.min);
     let maxPrice = parseInt(req.query.max);
 
-    console.log("cpa1",capacities);
-
+    console.log("cpa1", capacities);
 
     let brandsArray = [];
     let capacitiesArray = [];
     let filteringCriteria;
-
 
     if (brands !== "") {
       brandsArray = brands.split(",");
@@ -124,30 +122,27 @@ const getCategoryWithPage = async (req, res) => {
       };
     }
 
-
-    if(brands === "" && capacities === ""){
-
-      filteringCriteria = { category: req.params.category }
+    if (brands === "" && capacities === "") {
+      filteringCriteria = { category: req.params.category };
     }
-    
+
     console.log(capacities);
 
-    
     if (minPrice > 0 && maxPrice === 0) {
       maxPrice = 9999999999;
     }
-    
+
     if (
       (minPrice === 0 && maxPrice > 0) ||
       (minPrice > 0 && maxPrice === 0) ||
       (minPrice > 0 && maxPrice > 0)
-      ) {
-        filteringCriteria["price"] = {
-          $gt: minPrice,
-          $lt: maxPrice,
-        };
-      }
-      
+    ) {
+      filteringCriteria["price"] = {
+        $gt: minPrice,
+        $lt: maxPrice,
+      };
+    }
+
     let criterion = {};
 
     if (choise === "1") {
@@ -158,7 +153,7 @@ const getCategoryWithPage = async (req, res) => {
       criterion = { price: 1 }; // This is for price
     }
 
-    console.log("FIL CRE:",filteringCriteria);
+    console.log("FIL CRE:", filteringCriteria);
 
     const result = await Product.find(filteringCriteria)
       .sort(criterion)
@@ -191,19 +186,20 @@ const createCategory = async (req, res) => {
   }
 };
 
-
-const getCategories = async (req,res) =>{
-
-  try{
-
+const getCategories = async (req, res) => {
+  try {
     const allCategories = await Category.find();
 
     console.log(allCategories);
-    res.json(allCategories)
-
-  }catch(err){
+    res.json(allCategories);
+  } catch (err) {
     res.json(err);
   }
-}
+};
 
-module.exports = { getCategoryWithPage, getNumberOfCategory, createCategory,getCategories };
+module.exports = {
+  getCategoryWithPage,
+  getNumberOfCategory,
+  createCategory,
+  getCategories,
+};
