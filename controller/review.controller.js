@@ -5,6 +5,7 @@ const getReviewById = async (req, res) => {
     const findingReview = await Review.find({
       productName: req.params.productName,
     }).sort({ date: -1 });
+
     res.json(findingReview);
   } catch (err) {
     res.status(404).json({
@@ -19,7 +20,7 @@ const addReview = async (req, res) => {
 
   try {
     const review = {
-      productName: req.body.productName,
+      productName: req.body.productName.trim(),
       name: req.body.name,
       content: req.body.review,
       userId: req.body.userId,

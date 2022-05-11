@@ -13,6 +13,9 @@ const authRoute = require("./Middleware/auth.passportjs");
 const cors = require("cors");
 // This is your test secret API key.
 const stripe = require("stripe")(process.env.STRIPE);
+const fileUpload = require("express-fileupload");
+
+
 
 
 
@@ -28,6 +31,15 @@ const adminRouter = require("./routes/admin.router");
 const couponRouter = require("./routes/coupon.router");
 
 const app = express();
+
+
+app.use(express.static(path.join(__dirname, "/public")));
+
+
+
+// fileUpload
+
+app.use(fileUpload());
 
 //cors
 
@@ -127,5 +139,9 @@ app.post("/create-payment-intent", async (req, res) => {
     clientSecret: paymentIntent.client_secret,
   });
 });
+
+
+
+
 
 module.exports = app;
