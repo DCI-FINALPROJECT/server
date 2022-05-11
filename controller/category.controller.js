@@ -191,4 +191,19 @@ const createCategory = async (req, res) => {
   }
 };
 
-module.exports = { getCategoryWithPage, getNumberOfCategory, createCategory };
+
+const getCategories = async (req,res) =>{
+
+  try{
+
+    const allCategories = await Category.find();
+
+    console.log(allCategories);
+    res.json(allCategories)
+
+  }catch(err){
+    res.json(err);
+  }
+}
+
+module.exports = { getCategoryWithPage, getNumberOfCategory, createCategory,getCategories };

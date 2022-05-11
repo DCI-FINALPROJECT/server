@@ -1,6 +1,12 @@
+const express = require("express");
+const fileUpload = require("express-fileupload");
+const app = express();
 const Product = require("../Model/Product.model.js");
 const { validationResult } = require("express-validator");
 const filterProductsWithProductName = require("../helpers/filterProductsWithProductName.js");
+
+// default options
+app.use(fileUpload());
 
 const getAllProducts = async (req, res) => {
   try {
@@ -94,59 +100,49 @@ const deleteProduct = async (req, res) => {
 };
 
 const addProduct = async (req, res) => {
-  const data = req.body;
-  const file = req.file;
-  console.log("file", req.file, "data", data);
+  const tarih = new Date();
+  const rastgeleSayi = tarih.getTime();
 
-  try {
-    if (
-      !(
-        data.productName &&
-        data.category &&
-        data.brand &&
-        data.price &&
-        data.description &&
-        data.images &&
-        data.capacity &&
-        data.stock
-      )
-    ) {
-      return res.status(401).send("missing information");
-    }
-
-    const errors = validationResult(req);
-    const isValid = errors.isEmpty();
-
-
-    if (isValid) {
-
-
-      const product = new Product({
-        productName: data.productName,
-        category: data.category.toUpperCase(),
-        brand: data.brand,
-        price: data.price,
-        description: data.description,
-        images: data.images,
-        timestamp: new Date().toISOString(),
-        sales: data.sales,
-        capacity: data.capacity,
-        stock: data.stock,
-        productNameWithCapacity: data.productName + "-" + data.capacity
-
-      });
-
-      await product.save();
-      return res.status(200).send(product);
-    } else {
-      res.status(406).json({
-        message: "invalid input",
-        errors: errors.array(),
-      });
-    }
-  } catch (err) {
-    res.send(err);
+  if (!req.files) {
+    return console.log("Resim Eklenmeli");
   }
+
+  var dosya1isim = rastgeleSayi + "-" + req.body.productName + "-1.jpg";
+  var dosya2isim = rastgeleSayi + "-" + req.body.productName + "-2.jpg";
+  var dosya3isim = rastgeleSayi + "-" + req.body.productName + "-3.jpg";
+  var dosya4isim = rastgeleSayi + "-" + req.body.productName + "-4.jpg";
+
+  await req.files.dosya1.mv(`${__dirname}/../public/images/${dosya1isim}`);
+  await req.files.dosya2.mv(`${__dirname}/../public/images/${dosya2isim}`);
+  await req.files.dosya3.mv(`${__dirname}/../public/images/${dosya3isim}`);
+  await req.files.dosya4.mv(`${__dirname}/../public/images/${dosya4isim}`);
+
+  var urun = new Product({
+    productName: req.body.productName,
+    productNameWithCapacity:
+      req.body.productName + "-" + req.body.capacity + " GB",
+    category: req.body.category,
+    images: [
+      "http://localhost:5000/images/" + dosya1isim,
+      "http://localhost:5000/images/" + dosya2isim,
+      "http://localhost:5000/images/" + dosya3isim,
+      "http://localhost:5000/images/" + dosya4isim,
+    ],
+    stock: {
+      Black: req.body.Black,
+      Red: req.body.Red,
+      Green: req.body.Green,
+      Blue: req.body.Blue,
+    },
+    brand: req.body.brand,
+    description: req.body.description,
+    price: req.body.price,
+    sales: 0,
+    capacity: req.body.capacity,
+  });
+
+  console.log(urun);
+  await Product.create(urun);
 };
 
 // GET LATEST PRODUCTS !
