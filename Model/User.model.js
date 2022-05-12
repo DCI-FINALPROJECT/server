@@ -32,6 +32,10 @@ const userSchema = new Schema({
   },
   birthday:{
     type:String
+  },
+  isAdmin:{
+    type:Boolean,
+    required:true
   }
 });
 

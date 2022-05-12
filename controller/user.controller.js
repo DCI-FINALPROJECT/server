@@ -14,7 +14,7 @@ const addNewUser = async (req, res) => {
 
   try {
     if (isValid) {
-      const { firstName, lastName, email, password, address, phone, birthday } =
+      const { firstName, lastName, email, password, address, phone, birthday,isAdmin } =
         req.body;
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = {
@@ -25,6 +25,7 @@ const addNewUser = async (req, res) => {
         address,
         phone,
         birthday,
+        isAdmin
       };
       await User.create(newUser);
 
