@@ -14,6 +14,7 @@ const createOrder = async (req, res) => {
 
   try {
     const products = req.body.products;
+    const discount = req.body.discount
     const paymentId = await req.body.stripeToken.card.id;
     const userId = await req.body.userId;
     const date = new Date();
@@ -25,7 +26,7 @@ const createOrder = async (req, res) => {
       date.getDate() +
       "-" +
       Math.floor(Math.random() * 999999 + 100000);
-    const amount = calculateOrderAmount(req.body.products) / 100;
+    const amount = (calculateOrderAmount(req.body.products) / 100)-discount;
     const userEmail = req.body.userEmail;
     const userContact = {
       firstName: req.body.user.firstName,
@@ -37,6 +38,7 @@ const createOrder = async (req, res) => {
     const address = req.body.address;
 
     const newOrder = {
+      discount,
       products,
       paymentId,
       userId,

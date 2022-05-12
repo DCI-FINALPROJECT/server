@@ -5,6 +5,9 @@ const SchemaTypes = mongoose.Schema.Types;
 const orderSchema = new Schema({
   amount: {
     type: Number,
+  }, 
+  discount: {
+    type: Number,
   },
   userId: {
     type: String,
