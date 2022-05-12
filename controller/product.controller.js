@@ -57,7 +57,7 @@ const updateProduct = async (req, res) => {
   const tarih = new Date();
   const rastgeleSayi = tarih.getTime();
 
-  
+  console.log(req.body);
 
   if (!req.files) {
     return console.log("Resim Eklenmeli");
@@ -96,7 +96,7 @@ const updateProduct = async (req, res) => {
     description: req.body.description,
     price: req.body.price,
     sales: 0,
-    capacity: req.body.capacity + " GB",
+    capacity: req.body.capacity,
   };
 
 
