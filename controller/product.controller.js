@@ -54,22 +54,59 @@ const updateProduct = async (req, res) => {
   const id = req.params.id;
   const data = req.body;
 
-  try {
-    /* const findedProduct= await Product.findById({_id:id})
-    console.log(findedProduct); */
+  const tarih = new Date();
+  const rastgeleSayi = tarih.getTime();
+
+  
+
+  if (!req.files) {
+    return console.log("Resim Eklenmeli");
+  }
+
+  var dosya1isim = rastgeleSayi + "-" + req.body.productName + "-1.jpg";
+  var dosya2isim = rastgeleSayi + "-" + req.body.productName + "-2.jpg";
+  var dosya3isim = rastgeleSayi + "-" + req.body.productName + "-3.jpg";
+  var dosya4isim = rastgeleSayi + "-" + req.body.productName + "-4.jpg";
+
+  await req.files.dosya1.mv(`${__dirname}/../public/images/${dosya1isim}`);
+  await req.files.dosya2.mv(`${__dirname}/../public/images/${dosya2isim}`);
+  await req.files.dosya3.mv(`${__dirname}/../public/images/${dosya3isim}`);
+  await req.files.dosya4.mv(`${__dirname}/../public/images/${dosya4isim}`);
+
+  console.log(req.body.productName);
+
+  const product = {
+    productName: req.body.productName,
+    productNameWithCapacity:
+      req.body.productName + "-" + req.body.capacity + " GB",
+    category: req.body.category,
+    images: [
+      "http://localhost:5000/images/" + dosya1isim,
+      "http://localhost:5000/images/" + dosya2isim,
+      "http://localhost:5000/images/" + dosya3isim,
+      "http://localhost:5000/images/" + dosya4isim,
+    ],
+    stock: {
+      Black: req.body.Black,
+      Red: req.body.Red,
+      Green: req.body.Green,
+      Blue: req.body.Blue,
+    },
+    brand: req.body.brand,
+    description: req.body.description,
+    price: req.body.price,
+    sales: 0,
+    capacity: req.body.capacity + " GB",
+  };
+
+
+  try {    
     const updatedProduct = await Product.findByIdAndUpdate(
       { _id: id },
-      data
-      /* {
-        productName: data.productName ? data.productName : findedProduct.productName,
-        category: data.category ? data.category : findedProduct.category,
-        capacity: data.capacity ? data.capacity : findedProduct.capacity,
-        brand: data.brand,
-        description: data.description ? data.description : findedProduct.description,
-        images: data.images ? data.images : findedProduct.images,
-        price: data.price,
-      } */
+      product
+   
     );
+
     res
       .status(200)
       .json({ message: "product is updated", product: updatedProduct });
