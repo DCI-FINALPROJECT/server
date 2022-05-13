@@ -14,8 +14,16 @@ const addNewUser = async (req, res) => {
 
   try {
     if (isValid) {
-      const { firstName, lastName, email, password, address, phone, birthday,isAdmin } =
-        req.body;
+      const {
+        firstName,
+        lastName,
+        email,
+        password,
+        address,
+        phone,
+        birthday,
+        isAdmin,
+      } = req.body;
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = {
         firstName,
@@ -25,7 +33,7 @@ const addNewUser = async (req, res) => {
         address,
         phone,
         birthday,
-        isAdmin
+        isAdmin,
       };
       await User.create(newUser);
 
@@ -115,16 +123,14 @@ const userLoginController = async (req, res) => {
         userToken,
         userInformation,
         message: "Successfully login",
-        status: "success"
+        status: "success",
       });
-    }else{
-
+    } else {
       res.json({
         status: "error",
         message: "Password or E-mail are false!",
       });
     }
-
   } catch (err) {
     console.log(err);
     res.json({
@@ -200,39 +206,18 @@ const updateUser = async (req, res) => {
   }
 };
 
-const myActiveOrders = async (req, res) => {
-  try {
-    const response = await Order.find({
-      userEmail: req.body.email,
-      result: false,
-    }).sort({ date: -1 });
+const getAllUsers = async (req, res) => {
 
-    res.status(200).json(response);
+  console.log("REQQQQQQQQQQQQ",req.body);
+
+  try {
+    const allUsers = await User.find({email: {$nin: [req.body.email]}});
+
+    res.json(allUsers);
   } catch (err) {
-    res.status(404).json({
-      status: false,
-      message: err,
-    });
+    res.json(err);
   }
 };
-
-const myAllOrders = async (req, res) => {
-  try {
-    const response = await Order.find({
-      userEmail: req.body.email,
-    }).sort({ date: -1 });
-
-    res.status(200).json(response);
-  } catch (err) {
-    res.status(404).json({
-      status: false,
-      message: err,
-    });
-  }
-};
-
-
-
 
 module.exports = {
   addNewUser,
@@ -240,9 +225,8 @@ module.exports = {
   userLoginController,
   findUserController,
   updateUser,
-  myActiveOrders,
   passportChange,
   deleteUser,
   passportChange,
-  myAllOrders
+  getAllUsers,
 };

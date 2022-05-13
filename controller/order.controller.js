@@ -66,4 +66,35 @@ const createOrder = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, calculateOrderAmount };
+const myActiveOrders = async (req, res) => {
+  try {
+    const response = await Order.find({
+      userEmail: req.body.email,
+      result: false,
+    }).sort({ date: -1 });
+
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(404).json({
+      status: false,
+      message: err,
+    });
+  }
+};
+
+const myAllOrders = async (req, res) => {
+  try {
+    const response = await Order.find({
+      userEmail: req.body.email,
+    }).sort({ date: -1 });
+
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(404).json({
+      status: false,
+      message: err,
+    });
+  }
+};
+
+module.exports = { createOrder, calculateOrderAmount,myActiveOrders,myAllOrders };
