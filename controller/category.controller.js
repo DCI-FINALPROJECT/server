@@ -197,9 +197,32 @@ const getCategories = async (req, res) => {
   }
 };
 
+const deleteCategory = async(req,res) =>{
+
+  try{
+
+    const id = req.body.id;
+
+    await Category.findByIdAndDelete(id);
+
+    res.json({
+      status:"success",
+      deletedId:id
+    })
+
+  }catch(err){
+
+    res.status(404).json({
+      status:"fail"
+    })
+
+  }
+}
+
 module.exports = {
   getCategoryWithPage,
   getNumberOfCategory,
   createCategory,
   getCategories,
+  deleteCategory
 };

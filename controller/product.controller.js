@@ -65,10 +65,22 @@ const updateProduct = async (req, res) => {
     var dosya3isim = rastgeleSayi + "-" + req.body.productName + "-3.jpg";
     var dosya4isim = rastgeleSayi + "-" + req.body.productName + "-4.jpg";
 
-   req.files.dosya1 && await req.files.dosya1.mv(`${__dirname}/../public/images/${dosya1isim}`);
-   req.files.dosya2 && await req.files.dosya2.mv(`${__dirname}/../public/images/${dosya2isim}`);
-   req.files.dosya3 && await req.files.dosya3.mv(`${__dirname}/../public/images/${dosya3isim}`);
-   req.files.dosya4 && await req.files.dosya4.mv(`${__dirname}/../public/images/${dosya4isim}`);
+    req.files.dosya1 &&
+      (await req.files.dosya1.mv(
+        `${__dirname}/../public/images/${dosya1isim}`
+      ));
+    req.files.dosya2 &&
+      (await req.files.dosya2.mv(
+        `${__dirname}/../public/images/${dosya2isim}`
+      ));
+    req.files.dosya3 &&
+      (await req.files.dosya3.mv(
+        `${__dirname}/../public/images/${dosya3isim}`
+      ));
+    req.files.dosya4 &&
+      (await req.files.dosya4.mv(
+        `${__dirname}/../public/images/${dosya4isim}`
+      ));
   }
 
   // http://localhost:5000/images/1652428573784-Samsung s9 Plus-1.jpg
@@ -92,9 +104,9 @@ const updateProduct = async (req, res) => {
       ]);
 
   const product = {
-    productName: req.body.productName,
+    productName: req.body.productName.toUpperCase(),
     productNameWithCapacity:
-      req.body.productName + "-" + req.body.capacity,
+      req.body.productName + "-" + req.body.capacity.toUpperCase(),
     category: req.body.category,
     images: selectedImages,
 
@@ -104,11 +116,11 @@ const updateProduct = async (req, res) => {
       Green: req.body.Green,
       Blue: req.body.Blue,
     },
-    brand: req.body.brand,
+    brand: req.body.brand.toUpperCase(),
     description: req.body.description,
     price: req.body.price,
     sales: 0,
-    capacity: req.body.capacity,
+    capacity: req.body.capacity.toUpperCase(),
   };
 
   try {
@@ -165,9 +177,10 @@ const addProduct = async (req, res) => {
   await req.files.dosya4.mv(`${__dirname}/../public/images/${dosya4isim}`);
 
   const urun = new Product({
-    productName: req.body.productName,
+    productName: req.body.productName.toUpperCase(),
+    capacity: "64 GB",
     productNameWithCapacity:
-      req.body.productName + "-" + req.body.capacity + " GB",
+      req.body.productName + "-" + req.body.capacity.toUpperCase(),
     category: req.body.category,
     images: [
       "http://localhost:5000/images/" + dosya1isim,
@@ -181,15 +194,88 @@ const addProduct = async (req, res) => {
       Green: req.body.Green,
       Blue: req.body.Blue,
     },
-    brand: req.body.brand,
+    brand: req.body.brand.toUpperCase(),
     description: req.body.description,
     price: req.body.price,
-    sales: 0,
-    capacity: req.body.capacity + " GB",
+    sales: 0
   });
 
-  console.log(urun);
+  const urun2 = new Product({
+    productName: req.body.productName.toUpperCase(),
+    capacity: "128 GB",
+    productNameWithCapacity:
+      req.body.productName + "-" + "128 GB",
+    category: req.body.category,
+    images: [
+      "http://localhost:5000/images/" + dosya1isim,
+      "http://localhost:5000/images/" + dosya2isim,
+      "http://localhost:5000/images/" + dosya3isim,
+      "http://localhost:5000/images/" + dosya4isim,
+    ],
+    stock: {
+      Black: 0,
+      Red: 0,
+      Green: 0,
+      Blue: 0,
+    },
+    brand: req.body.brand.toUpperCase(),
+    description: req.body.description,
+    price: req.body.price,
+    sales: 0
+  });
+
+  const urun3 = new Product({
+    productName: req.body.productName.toUpperCase(),
+    capacity: "256 GB",
+    productNameWithCapacity:
+      req.body.productName + "-" + "256 GB",
+    category: req.body.category,
+    images: [
+      "http://localhost:5000/images/" + dosya1isim,
+      "http://localhost:5000/images/" + dosya2isim,
+      "http://localhost:5000/images/" + dosya3isim,
+      "http://localhost:5000/images/" + dosya4isim,
+    ],
+    stock: {
+      Black: 0,
+      Red: 0,
+      Green: 0,
+      Blue: 0,
+    },
+    brand: req.body.brand.toUpperCase(),
+    description: req.body.description,
+    price: req.body.price,
+    sales: 0
+  });
+
+  const urun4 = new Product({
+    productName: req.body.productName.toUpperCase(),
+    capacity: "512 GB",
+    productNameWithCapacity:
+      req.body.productName + "-" + "512 GB",
+    category: req.body.category,
+    images: [
+      "http://localhost:5000/images/" + dosya1isim,
+      "http://localhost:5000/images/" + dosya2isim,
+      "http://localhost:5000/images/" + dosya3isim,
+      "http://localhost:5000/images/" + dosya4isim,
+    ],
+    stock: {
+      Black: 0,
+      Red: 0,
+      Green: 0,
+      Blue: 0,
+    },
+    brand: req.body.brand.toUpperCase(),
+    description: req.body.description,
+    price: req.body.price,
+    sales: 0
+  });
+
   await Product.create(urun);
+  await Product.create(urun2);
+  await Product.create(urun3);
+  await Product.create(urun4);
 };
 
 // GET LATEST PRODUCTS !
@@ -291,7 +377,7 @@ const getBrandsFromDataBase = async (req, res) => {
 
 const getProductByCapacity = async (req, res) => {
   try {
-    const params = req.params;
+    const params = await req.params;
     console.log(params);
 
     const findingElement = await Product.findOne({
