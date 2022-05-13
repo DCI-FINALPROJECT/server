@@ -57,35 +57,47 @@ const updateProduct = async (req, res) => {
   const tarih = new Date();
   const rastgeleSayi = tarih.getTime();
 
-  console.log(req.body);
+  console.log("req.body", req.files);
 
-  if (!req.files) {
-    return console.log("Resim Eklenmeli");
+  if (req.files !== null) {
+    var dosya1isim = rastgeleSayi + "-" + req.body.productName + "-1.jpg";
+    var dosya2isim = rastgeleSayi + "-" + req.body.productName + "-2.jpg";
+    var dosya3isim = rastgeleSayi + "-" + req.body.productName + "-3.jpg";
+    var dosya4isim = rastgeleSayi + "-" + req.body.productName + "-4.jpg";
+
+   req.files.dosya1 && await req.files.dosya1.mv(`${__dirname}/../public/images/${dosya1isim}`);
+   req.files.dosya2 && await req.files.dosya2.mv(`${__dirname}/../public/images/${dosya2isim}`);
+   req.files.dosya3 && await req.files.dosya3.mv(`${__dirname}/../public/images/${dosya3isim}`);
+   req.files.dosya4 && await req.files.dosya4.mv(`${__dirname}/../public/images/${dosya4isim}`);
   }
 
-  var dosya1isim = rastgeleSayi + "-" + req.body.productName + "-1.jpg";
-  var dosya2isim = rastgeleSayi + "-" + req.body.productName + "-2.jpg";
-  var dosya3isim = rastgeleSayi + "-" + req.body.productName + "-3.jpg";
-  var dosya4isim = rastgeleSayi + "-" + req.body.productName + "-4.jpg";
+  // http://localhost:5000/images/1652428573784-Samsung s9 Plus-1.jpg
 
-  await req.files.dosya1.mv(`${__dirname}/../public/images/${dosya1isim}`);
-  await req.files.dosya2.mv(`${__dirname}/../public/images/${dosya2isim}`);
-  await req.files.dosya3.mv(`${__dirname}/../public/images/${dosya3isim}`);
-  await req.files.dosya4.mv(`${__dirname}/../public/images/${dosya4isim}`);
+  console.log("req.body:", req.files);
 
-  console.log(req.body.productName);
+  let selectedImages = "";
+
+  req.files === null
+    ? (selectedImages = [
+        req.body.dosya1,
+        req.body.dosya2,
+        req.body.dosya3,
+        req.body.dosya4,
+      ])
+    : (selectedImages = [
+        "http://localhost:5000/images/" + dosya1isim,
+        "http://localhost:5000/images/" + dosya2isim,
+        "http://localhost:5000/images/" + dosya3isim,
+        "http://localhost:5000/images/" + dosya4isim,
+      ]);
 
   const product = {
     productName: req.body.productName,
     productNameWithCapacity:
-      req.body.productName + "-" + req.body.capacity + " GB",
+      req.body.productName + "-" + req.body.capacity,
     category: req.body.category,
-    images: [
-      "http://localhost:5000/images/" + dosya1isim,
-      "http://localhost:5000/images/" + dosya2isim,
-      "http://localhost:5000/images/" + dosya3isim,
-      "http://localhost:5000/images/" + dosya4isim,
-    ],
+    images: selectedImages,
+
     stock: {
       Black: req.body.Black,
       Red: req.body.Red,
@@ -99,12 +111,10 @@ const updateProduct = async (req, res) => {
     capacity: req.body.capacity,
   };
 
-
-  try {    
+  try {
     const updatedProduct = await Product.findByIdAndUpdate(
       { _id: id },
       product
-   
     );
 
     res
@@ -144,17 +154,17 @@ const addProduct = async (req, res) => {
     return console.log("Resim Eklenmeli");
   }
 
-  var dosya1isim = rastgeleSayi + "-" + req.body.productName + "-1.jpg";
-  var dosya2isim = rastgeleSayi + "-" + req.body.productName + "-2.jpg";
-  var dosya3isim = rastgeleSayi + "-" + req.body.productName + "-3.jpg";
-  var dosya4isim = rastgeleSayi + "-" + req.body.productName + "-4.jpg";
+  const dosya1isim = rastgeleSayi + "-" + req.body.productName + "-1.jpg";
+  const dosya2isim = rastgeleSayi + "-" + req.body.productName + "-2.jpg";
+  const dosya3isim = rastgeleSayi + "-" + req.body.productName + "-3.jpg";
+  const dosya4isim = rastgeleSayi + "-" + req.body.productName + "-4.jpg";
 
   await req.files.dosya1.mv(`${__dirname}/../public/images/${dosya1isim}`);
   await req.files.dosya2.mv(`${__dirname}/../public/images/${dosya2isim}`);
   await req.files.dosya3.mv(`${__dirname}/../public/images/${dosya3isim}`);
   await req.files.dosya4.mv(`${__dirname}/../public/images/${dosya4isim}`);
 
-  var urun = new Product({
+  const urun = new Product({
     productName: req.body.productName,
     productNameWithCapacity:
       req.body.productName + "-" + req.body.capacity + " GB",
