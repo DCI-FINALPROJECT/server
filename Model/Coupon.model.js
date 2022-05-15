@@ -7,6 +7,10 @@ const couponSchema = new Schema({
     type: String,
     required: true
   },
+  giftNumber: {
+    type: String,
+    required: true
+  },
   couponAmount: {
     type: Number,
     required: true
