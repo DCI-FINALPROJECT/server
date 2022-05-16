@@ -207,16 +207,30 @@ const updateUser = async (req, res) => {
 };
 
 const getAllUsers = async (req, res) => {
-
-  console.log("REQQQQQQQQQQQQ",req.body);
+  console.log("REQQQQQQQQQQQQ", req.body);
 
   try {
-    const allUsers = await User.find({email: {$nin: [req.body.email]}});
+    const allUsers = await User.find({ email: { $nin: [req.body.email] } });
 
     res.json(allUsers);
   } catch (err) {
     res.json(err);
   }
+};
+
+const makeAdmin = async (req, res) => {
+  console.log(req.body);
+
+  const email = req.body.email;
+  try {
+    await User.updateOne(
+      { email: email },
+      { isAdmin: true }
+    );
+
+    res.json(email);
+
+  } catch (err) {}
 };
 
 module.exports = {
@@ -229,4 +243,5 @@ module.exports = {
   deleteUser,
   passportChange,
   getAllUsers,
+  makeAdmin,
 };

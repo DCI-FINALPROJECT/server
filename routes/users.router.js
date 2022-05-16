@@ -8,6 +8,7 @@ const {
   passportChange,
   deleteUser,
   getAllUsers,
+  makeAdmin,
 } = require("../controller/user.controller");
 var router = express.Router();
 const { body } = require("express-validator");
@@ -69,6 +70,8 @@ router.get("/finduser", findUserController);
 router.patch("/updateuser", updateUser);
 
 router.post("/admin/getallusers",getAllUsers);
+
+router.patch("/admin/makeAdmin",makeAdmin);
 
 
 module.exports = router;
