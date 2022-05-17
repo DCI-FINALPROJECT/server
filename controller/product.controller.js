@@ -60,10 +60,10 @@ const updateProduct = async (req, res) => {
   console.log("req.body", req.files);
 
   if (req.files !== null) {
-    var dosya1isim = rastgeleSayi + "-" + req.body.productName + "-1.jpg";
-    var dosya2isim = rastgeleSayi + "-" + req.body.productName + "-2.jpg";
-    var dosya3isim = rastgeleSayi + "-" + req.body.productName + "-3.jpg";
-    var dosya4isim = rastgeleSayi + "-" + req.body.productName + "-4.jpg";
+    var dosya1isim = rastgeleSayi + "-" + data.productName + "-1.jpg";
+    var dosya2isim = rastgeleSayi + "-" + data.productName + "-2.jpg";
+    var dosya3isim = rastgeleSayi + "-" + data.productName + "-3.jpg";
+    var dosya4isim = rastgeleSayi + "-" + data.productName + "-4.jpg";
 
     req.files.dosya1 &&
       (await req.files.dosya1.mv(
@@ -85,16 +85,16 @@ const updateProduct = async (req, res) => {
 
   // http://localhost:5000/images/1652428573784-Samsung s9 Plus-1.jpg
 
-  console.log("req.body:", req.files);
+  console.log("data:", req.files);
 
   let selectedImages = "";
 
   req.files === null
     ? (selectedImages = [
-        req.body.dosya1,
-        req.body.dosya2,
-        req.body.dosya3,
-        req.body.dosya4,
+        data.dosya1,
+        data.dosya2,
+        data.dosya3,
+        data.dosya4,
       ])
     : (selectedImages = [
         "http://localhost:5000/images/" + dosya1isim,
@@ -394,6 +394,23 @@ const getProductByCapacity = async (req, res) => {
   }
 };
 
+
+const updateProductStock = async(req,res) =>{
+
+  try{
+
+    console.log(req.body);
+
+  }catch(err){
+
+    res.json(err);
+  }
+
+
+
+
+}
+
 module.exports = {
   addProduct,
   deleteProduct,
@@ -406,4 +423,5 @@ module.exports = {
   getProductByCapacity,
   getAllProducts,
   updateProduct,
+  updateProductStock
 };

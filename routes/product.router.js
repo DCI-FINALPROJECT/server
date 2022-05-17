@@ -13,6 +13,7 @@ const {
   deleteProduct,
   updateProduct,
   deneme,
+  updateProductStock,
 } = require("../controller/product.controller");
 const { body } = require("express-validator");
 const auth = require("../Middleware/auth.jwt.middleware");
@@ -66,5 +67,9 @@ router.get("/product/brands/filter/:category", getBrandsFromDataBase);
 
 // GET PRODUCT BY CAPACITY
 router.get("/product/capacity/:productName/:capacity", getProductByCapacity);
+
+// UPDATE PRODUCT STOCK
+
+router.patch("/product/stock",updateProductStock);
 
 module.exports = router;
