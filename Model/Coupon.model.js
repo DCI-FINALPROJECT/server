@@ -18,6 +18,9 @@ const couponSchema = new Schema({
   isUsed: {
     type: Boolean
   },
+  isBuy: {
+    type: Boolean
+  },
 });
 
 const Coupon = mongoose.model("Coupon", couponSchema);
