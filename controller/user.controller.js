@@ -9,6 +9,10 @@ require("dotenv").config();
 const jwt_secret_key = process.env.JWT_SECRET_KEY;
 
 const addNewUser = async (req, res) => {
+
+  console.log(req.body);
+
+
   const errors = validationResult(req);
   const isValid = errors.isEmpty();
 
@@ -22,7 +26,7 @@ const addNewUser = async (req, res) => {
         address,
         phone,
         birthday,
-        isAdmin,
+        isAdmin=false,
       } = req.body;
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = {
@@ -33,7 +37,7 @@ const addNewUser = async (req, res) => {
         address,
         phone,
         birthday,
-        isAdmin,
+        isAdmin:false,
       };
       await User.create(newUser);
 
