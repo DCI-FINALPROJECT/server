@@ -83,7 +83,7 @@ const updateProduct = async (req, res) => {
       ));
   }
 
-  // http://localhost:5000/images/1652428573784-Samsung s9 Plus-1.jpg
+  // https://smartshopdcifinal.herokuapp.com/images/1652428573784-Samsung s9 Plus-1.jpg
 
   console.log("data:", req.files);
 
@@ -97,10 +97,10 @@ const updateProduct = async (req, res) => {
         data.dosya4,
       ])
     : (selectedImages = [
-        "http://localhost:5000/images/" + dosya1isim,
-        "http://localhost:5000/images/" + dosya2isim,
-        "http://localhost:5000/images/" + dosya3isim,
-        "http://localhost:5000/images/" + dosya4isim,
+        "https://smartshopdcifinal.herokuapp.com/images/" + dosya1isim,
+        "https://smartshopdcifinal.herokuapp.com/images/" + dosya2isim,
+        "https://smartshopdcifinal.herokuapp.com/images/" + dosya3isim,
+        "https://smartshopdcifinal.herokuapp.com/images/" + dosya4isim,
       ]);
 
   const product = {
@@ -183,10 +183,10 @@ const addProduct = async (req, res) => {
       req.body.productName + "-" + req.body.capacity.toUpperCase(),
     category: req.body.category,
     images: [
-      "http://localhost:5000/images/" + dosya1isim,
-      "http://localhost:5000/images/" + dosya2isim,
-      "http://localhost:5000/images/" + dosya3isim,
-      "http://localhost:5000/images/" + dosya4isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya1isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya2isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya3isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya4isim,
     ],
     stock: {
       Black: req.body.Black,
@@ -207,10 +207,10 @@ const addProduct = async (req, res) => {
       req.body.productName + "-" + "128 GB",
     category: req.body.category,
     images: [
-      "http://localhost:5000/images/" + dosya1isim,
-      "http://localhost:5000/images/" + dosya2isim,
-      "http://localhost:5000/images/" + dosya3isim,
-      "http://localhost:5000/images/" + dosya4isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya1isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya2isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya3isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya4isim,
     ],
     stock: {
       Black: 0,
@@ -231,10 +231,10 @@ const addProduct = async (req, res) => {
       req.body.productName + "-" + "256 GB",
     category: req.body.category,
     images: [
-      "http://localhost:5000/images/" + dosya1isim,
-      "http://localhost:5000/images/" + dosya2isim,
-      "http://localhost:5000/images/" + dosya3isim,
-      "http://localhost:5000/images/" + dosya4isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya1isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya2isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya3isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya4isim,
     ],
     stock: {
       Black: 0,
@@ -255,10 +255,10 @@ const addProduct = async (req, res) => {
       req.body.productName + "-" + "512 GB",
     category: req.body.category,
     images: [
-      "http://localhost:5000/images/" + dosya1isim,
-      "http://localhost:5000/images/" + dosya2isim,
-      "http://localhost:5000/images/" + dosya3isim,
-      "http://localhost:5000/images/" + dosya4isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya1isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya2isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya3isim,
+      "https://smartshopdcifinal.herokuapp.com/images/" + dosya4isim,
     ],
     stock: {
       Black: 0,
