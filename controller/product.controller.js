@@ -325,7 +325,7 @@ const getSimilarProducts = async (req, res) => {
       category: category,
       _id: { $nin: id },
       productName: { $nin: productName },
-    }).limit(6);
+    });
 
     const result = await filterProductsWithProductName(similarProducts);
 
