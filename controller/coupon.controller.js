@@ -27,13 +27,34 @@ const getCoupon = async (req, res) => {
   }
 };
 
+
+const getAllCoupon = async(req, res) => {
+  try{
+
+    const allCoupon = await Coupon.find();
+    console.log(typeof(allCoupon));
+    res.json(allCoupon);
+
+
+
+  }catch(err){
+    res.status(404).json({
+      success: false,
+      message: err,
+    });
+
+  }
+
+}
+
 const getGift = async (req, res) => {
 try{
 
   const {giftNumber} = req.body
   console.log(giftNumber);
-  const findingCoupon = await Coupon.findOne({ giftNumber, isUsed:false });
+  const findingCoupon = await Coupon.findOne({ giftNumber, isBuy:false });
   console.log("findingCoupon", findingCoupon);
+  findingCoupon.isBuy=true
   res.json({couponNumber:findingCoupon.couponNumber})
 }catch(err){
   res.status(404).json({
@@ -60,6 +81,7 @@ const postCoupon = async (req, res) => {
         couponAmount,
         giftNumber,
         isUsed: false,
+        isBuy: false,
       };
       await Coupon.create(newCoupon);
     }
@@ -76,5 +98,6 @@ const postCoupon = async (req, res) => {
 module.exports = {
   getCoupon,
   postCoupon,
-  getGift
+  getGift,
+  getAllCoupon
 };
