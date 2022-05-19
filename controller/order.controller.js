@@ -112,6 +112,20 @@ const getAllNewOrders = async (req, res) => {
   }
 };
 
+const getShippedOrders = async (req, res) => {
+  try {
+    const shippedOrders = await Order.find({status:["Order received","Shipped"]});
+
+    console.log(shippedOrders);
+
+ 
+
+    res.status(200).json(shippedOrders);
+  } catch (err) {
+    res.status(404).json(err);
+  }
+};
+
 const shipOrder = async (req, res) => {
   console.log(req.body);
 
@@ -129,11 +143,29 @@ const shipOrder = async (req, res) => {
   }
 };
 
+const deliveryOrder = async (req, res) => {
+  console.log(req.body);
+
+  const orderNumber = req.body.orderNumber;
+  try {
+    await Order.updateOne(
+      { orderNumber: orderNumber },
+      { status: ["Order received","Shipped","Delivery"] }
+    );
+
+    res.json(orderNumber);
+
+  } catch (err) {
+    res.status(404).json(err);
+  }
+};
 module.exports = {
   createOrder,
   calculateOrderAmount,
   myActiveOrders,
   myAllOrders,
   getAllNewOrders,
-  shipOrder
+  shipOrder,
+  getShippedOrders,
+  deliveryOrder
 };
