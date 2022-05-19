@@ -327,7 +327,9 @@ const getSimilarProducts = async (req, res) => {
       productName: { $nin: productName },
     });
 
-    const result = await filterProductsWithProductName(similarProducts);
+    const foundedProducts = await Product.find().sort({ sales: -1 });
+
+    const result = similarProducts.length >= 20 ? await filterProductsWithProductName(similarProducts) : await filterProductsWithProductName(foundedProducts) ;
 
     res.json(result);
   } catch (err) {

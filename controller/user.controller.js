@@ -234,7 +234,9 @@ const makeAdmin = async (req, res) => {
 
     res.json(email);
 
-  } catch (err) {}
+  } catch (err) {
+    res.json(err)
+  }
 };
 
 module.exports = {
