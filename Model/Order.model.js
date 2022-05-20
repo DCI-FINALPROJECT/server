@@ -29,6 +29,7 @@ const orderSchema = new Schema({
   },
   status: {
     type: Array,
+    default :["Order received"]
   },
   result: {
     type: Boolean,
