@@ -81,6 +81,22 @@ const myActiveOrders = async (req, res) => {
   }
 };
 
+const completedOrders = async (req, res) => {
+  try {
+    const response = await Order.find({
+      userEmail: req.body.email,
+      result: true,
+    }).sort({ date: -1 });
+
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(404).json({
+      status: false,
+      message: err,
+    });
+  }
+};
+
 const myAllOrders = async (req, res) => {
   try {
     const response = await Order.find({
@@ -114,11 +130,11 @@ const getAllNewOrders = async (req, res) => {
 
 const getShippedOrders = async (req, res) => {
   try {
-    const shippedOrders = await Order.find({status:["Order received","Shipped"]});
+    const shippedOrders = await Order.find({
+      status: ["Order received", "Shipped"],
+    });
 
     console.log(shippedOrders);
-
- 
 
     res.status(200).json(shippedOrders);
   } catch (err) {
@@ -133,11 +149,10 @@ const shipOrder = async (req, res) => {
   try {
     await Order.updateOne(
       { orderNumber: orderNumber },
-      { status: ["Order received","Shipped"] }
+      { status: ["Order received", "Shipped"] }
     );
 
     res.json(orderNumber);
-
   } catch (err) {
     res.status(404).json(err);
   }
@@ -150,15 +165,45 @@ const deliveryOrder = async (req, res) => {
   try {
     await Order.updateOne(
       { orderNumber: orderNumber },
-      { status: ["Order received","Shipped","Delivery"] }
+      { status: ["Order received", "Shipped", "Delivery"] }
     );
 
     res.json(orderNumber);
-
   } catch (err) {
     res.status(404).json(err);
   }
 };
+
+const completeOrder = async (req, res) => {
+  console.log(req.body);
+
+  const orderNumber = req.body.orderNumber;
+  try {
+    await Order.updateOne(
+      { orderNumber: orderNumber },
+      { status: ["Order received", "Shipped", "Delivery", "Completed"] , result : true }
+    );
+
+    res.json(orderNumber);
+  } catch (err) {
+    res.status(404).json(err);
+  }
+};
+
+const getAllDeliveryOrder = async (req, res) => {
+  try {
+    const deliveryOrders = await Order.find({
+      status: ["Order received", "Shipped", "Delivery"],
+    });
+
+    console.log(deliveryOrders);
+
+    res.status(200).json(deliveryOrders);
+  } catch (err) {
+    res.status(404).json(err);
+  }
+};
+
 module.exports = {
   createOrder,
   calculateOrderAmount,
@@ -167,5 +212,7 @@ module.exports = {
   getAllNewOrders,
   shipOrder,
   getShippedOrders,
-  deliveryOrder
+  deliveryOrder,
+  getAllDeliveryOrder,
+  completeOrder
 };

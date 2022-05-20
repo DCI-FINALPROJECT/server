@@ -1,5 +1,5 @@
 const express = require("express");
-const { createOrder, myActiveOrders, myAllOrders, getAllNewOrders, shipOrder, getShippedOrders, deliveryOrder } = require("../controller/order.controller");
+const { createOrder, myActiveOrders, myAllOrders, getAllNewOrders, shipOrder, getShippedOrders, deliveryOrder, getAllDeliveryOrder, completeOrder } = require("../controller/order.controller");
 const router = express.Router();
 
 
@@ -15,6 +15,10 @@ router.patch("/shiporder",shipOrder);
 
 router.patch("/deliveryOrder",deliveryOrder);
 
-router.get("/shippedorders",getShippedOrders)
+router.patch("/completeorder",completeOrder);
+
+router.get("/shippedorders",getShippedOrders);
+
+router.get("/getalldeliveryorder",getAllDeliveryOrder);
 
 module.exports = router;
