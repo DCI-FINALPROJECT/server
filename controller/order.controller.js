@@ -1,4 +1,5 @@
 const Order = require("../Model/Order.model");
+const Coupon = require("../Model/Coupon.model")
 
 const calculateOrderAmount = (items) => {
   let total = 0;
@@ -13,7 +14,35 @@ const calculateOrderAmount = (items) => {
 const createOrder = async (req, res) => {
   try {
     const products = req.body.products;
-    const discount = req.body.discount;
+
+    console.log("products",products);
+
+    const couponstoClient = []
+    const coupons = products.filter(product=>{
+      return product.capacity.includes("GC")
+    })
+    if(coupons){
+      console.log("if calisiyor");
+      coupons.forEach(async coupon=>{
+        const giftNumber=coupon.capacity /* "gc25" */
+        const findingCoupon =await Coupon.findOne({giftNumber, isBuy:false, isUsed:false})
+        console.log(findingCoupon);
+
+
+        if(findingCoupon){
+
+          const updatedCoupon = await Coupon.findByIdAndUpdate( { _id: findingCoupon._id },
+            { isBuy: true })
+
+            console.log("updatedCoupon", updatedCoupon);
+          couponstoClient.push(updatedCoupon)
+          console.log("couponstoClient", couponstoClient);
+        }
+      })
+    }
+
+    const discount = req.body.discount
+
     const paymentId = await req.body.stripeToken.card.id;
     const userId = await req.body.userId;
     const date = new Date();
@@ -52,9 +81,10 @@ const createOrder = async (req, res) => {
     const response = await Order.create(newOrder);
 
     if (response) {
-      res.json({
+      await res.json({
         success: true,
         orderNumber: orderNumber,
+        couponstoClient: couponstoClient
       });
     }
   } catch (err) {
