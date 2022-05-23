@@ -299,7 +299,7 @@ const getLatestProducts = async (req, res) => {
 
 const getBestSellers = async (req, res) => {
   try {
-    const foundedProducts = await Product.find().sort({ sales: -1 });
+    const foundedProducts = await Product.find().limit(16).sort({ sales: -1 });
 
     const result = await filterProductsWithProductName(foundedProducts);
 
