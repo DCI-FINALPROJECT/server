@@ -282,7 +282,7 @@ const addProduct = async (req, res) => {
 
 const getLatestProducts = async (req, res) => {
   try {
-    const foundedProducts = await Product.find().limit(20).sort({ _id: -1 });
+    const foundedProducts = await Product.find().limit(32).sort({ _id: -1 });
 
     const result = await filterProductsWithProductName(foundedProducts); // HELPER USED HERE :) SUPEERRR
 
@@ -299,7 +299,7 @@ const getLatestProducts = async (req, res) => {
 
 const getBestSellers = async (req, res) => {
   try {
-    const foundedProducts = await Product.find().limit(16).sort({ sales: -1 });
+    const foundedProducts = await Product.find().limit(32).sort({ sales: -1 });
 
     const result = await filterProductsWithProductName(foundedProducts);
 
